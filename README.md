@@ -11,3 +11,5 @@ Link: https://github.com/DirkSonguer/UWPConversationalWeather
 Meteocons: http://www.alessioatzeni.com/meteocons/
 
 Tested with Windows 10 Mobile on a Lumia 950XL and the 10.0.10586 emulator.
+
+![alt text](https://github.com/DirkSonguer/UWPConversationalWeather/blob/master/cw_screenshot.png "ConversationalWeather Screenshot")
