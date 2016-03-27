@@ -134,7 +134,7 @@ namespace ConversationalWeather.WeatherAPI
 
                         // try to get the geolocation and set it to the property
                         CurrentPosition = await geolocator.GetGeopositionAsync().AsTask(token);
-                        Status = "Ok, found you!";
+                        Status = "Ok, found your position";
                         break;
 
                     // if the user denied the access

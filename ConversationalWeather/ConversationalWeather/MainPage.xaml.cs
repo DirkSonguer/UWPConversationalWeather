@@ -49,6 +49,7 @@ namespace ConversationalWeather
             weatherApi.GetCurrentLocation();
         }
 
+        // weather data has changed
         public void weatherApiPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // position was found
@@ -66,7 +67,7 @@ namespace ConversationalWeather
 
         public void GeopositionFound()
         {
-            // textWeatherInformation.Text = "Loading some weather information";
+            textLocationInformation.Text = "Loading weather information";
         }
 
         // weather data was received
@@ -138,38 +139,53 @@ namespace ConversationalWeather
                 StorageFile item = await StorageFile.GetFileFromApplicationUriAsync(new Uri(this.BaseUri, "/Assets/WeatherIcons/" + weatherCode + ".png"));
 
                 // here we can assume that the file does exist
-                // we create a bitmap with the icon and load it into the respective image icon slot 
+                // we create a bitmap with the icon and load it into the respective image icon slot
+                // btw. the following link helped me as some namespaces are different for UWP than standard windows / WFP
                 // https://msdn.microsoft.com/en-us/windows/uwp/porting/wpsl-to-uwp-namespace-and-class-mappings
                 BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, "/Assets/WeatherIcons/" + weatherCode + ".png"));
                 weatherIconDictionary[weatherIconIndex].Source = bitmapImage;
             }
             catch (FileNotFoundException ex)
             {
+                // this means the image file for the weather state could not be found
+                // first check if this happened before
                 if (!recursion)
                 {
+                    // if not, it might be that the weather state has different icons for day / night
+                    // for this, we can check the current time
                     DateTime currentTime = DateTime.Now;
 
+                    // based on the time, we can choose the day / night version
                     if ((currentTime.Hour > 8) && (currentTime.Hour < 20))
                     {
+                        // load day version
+                        // note the recursion flag
                         this.selectWeatherIcon(weatherCode + "_day", weatherIconIndex, true);
                     }
                     else
                     {
+                        // load night version
+                        // note the recursion flag
                         this.selectWeatherIcon(weatherCode + "_night", weatherIconIndex, true);
                     }
                 }
                 else
                 {
+                    // this means that no icon exists or the weather state
+                    // and we also checked for day / night versions
+                    // in this case, we can fall back to the base states
+                    // example: 812 -> 800
+                    // we start by removing any day / night identifiers
                     string[] stringSeparators = new string[] { "_" };
                     string[] result;
-
-                    // Display the original string and delimiter string.
-                    // Split a string delimited by another string and return all elements.
                     result = weatherCode.Split(stringSeparators, StringSplitOptions.None);
 
+                    // convert to base state
                     int rawWeatherCode = Convert.ToInt16(result[0]);
                     int baseWeatherCode = Convert.ToInt16(rawWeatherCode / 100) * 100;
 
+                    // done, try loading it again
+                    // also note the recursion flag
                     if (baseWeatherCode != rawWeatherCode)
                     {
                         this.selectWeatherIcon(baseWeatherCode.ToString(), weatherIconIndex, false);
@@ -178,10 +194,10 @@ namespace ConversationalWeather
             }
         }
 
+        // show status message
         public void StatusChanged()
         {
             textLocationInformation.Text = weatherApi.Status;
         }
-
     }
 }
