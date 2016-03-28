@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
 using ConversationalWeather.WeatherAPI;
@@ -159,7 +160,10 @@ namespace ConversationalWeather
             textWeatherForecast.Text = weatherSummary + " later.";
 
             // display temperature data
-            textTemperatureInformation.Text = "The temperature will be between " + Convert.ToInt16(minTemp) + "°F and " + Convert.ToInt16(maxTemp) + "°F.";
+            // note that we change the temperature unit sign according to the chosen one
+            String temperatureUnitSign = "°F";
+            if (weatherApi.useCelsius) temperatureUnitSign = "°C";
+            textTemperatureInformation.Text = "The temperature will be between " + Convert.ToInt16(minTemp) + temperatureUnitSign + " and " + Convert.ToInt16(maxTemp) + temperatureUnitSign + ".";
 
             // hide the loader and show UI elements for data
             panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -245,10 +249,19 @@ namespace ConversationalWeather
             textLoadingStatus.Text = weatherApi.Status;
         }
 
+        // temperature unit has changed
         private void ToggleTemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // set temperature flag accordingly
             weatherApi.useCelsius = toggleTemperatureUnit.IsOn;
+        }
+
+        // current pivot item has changed
+        private void RootPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // set the background color brush of the root pivot to the background color of the current pivot item
+            // this basically leads to a smooth transition from one color to the next when switching pivot items
+            rootPivot.Background = (rootPivot.Items[rootPivot.SelectedIndex] as PivotItem).Background;
         }
     }
 }

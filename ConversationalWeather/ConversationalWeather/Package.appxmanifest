@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="3069DirkSonguer.ConversationalWeather" Publisher="CN=B3773141-E677-4E0D-8022-4344E953766C" Version="1.1.0.0" />
+  <Identity Name="3069DirkSonguer.ConversationalWeather" Publisher="CN=B3773141-E677-4E0D-8022-4344E953766C" Version="1.2.0.0" />
   <mp:PhoneIdentity PhoneProductId="59057fb7-34f7-44c0-b4ff-cc6ff8b84fe8" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Conversational Weather</DisplayName>
