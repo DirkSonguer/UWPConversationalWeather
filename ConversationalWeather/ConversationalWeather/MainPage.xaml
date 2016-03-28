@@ -28,6 +28,15 @@
                 <TextBlock x:Name="textTemperatureHint" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
             </StackPanel>
         </PivotItem>
+        <PivotItem>
+            <StackPanel Margin="0,-46,0,0" VerticalAlignment="Top">
+                <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="A little app by Dirk Songuer." HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
+                <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="This application will not send or store any personal data." HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
+                <StackPanel Margin="0,30,0,0" VerticalAlignment="Top">
+                    <ToggleSwitch x:Name="temperatureUnit" Header="Temperature units" Toggled="TemperatureUnit_Toggled" OffContent="Fahrenheit" OnContent="Celsius" RequestedTheme="Dark" IsOn="True" />
+                </StackPanel>
+            </StackPanel>
+        </PivotItem>
     </Pivot>
     
 </Page>

@@ -45,8 +45,8 @@ namespace ConversationalWeather
             imageWeatherIcon3.Width = (bounds.Width / 4.5);
             imageWeatherIcon4.Width = (bounds.Width / 4.5);
 
-            // add tap event to switch page
-//            pageGrid.Tapped += new TappedEventHandler(this.SwitchPage);
+            // add double tap event to switch page
+            pageGrid.DoubleTapped += new DoubleTappedEventHandler(this.reloadWeatherData);
 
             // check if weather data is already loaded
             if (!weatherApi.weatherDataLoaded)
@@ -60,6 +60,13 @@ namespace ConversationalWeather
                 // just use the preloaded data and populate the components again
                 this.WeatherForecastLoaded();
             }
+        }
+
+        public void reloadWeatherData(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            // TODO: clear data
+            // TODO: show loading
+            weatherApi.GetCurrentLocation();
         }
 
         // weather data has changed
@@ -90,20 +97,28 @@ namespace ConversationalWeather
         public void WeatherForecastLoaded()
         {
             // show location string
-            textLocationInformation.Text = "Seems like you're in " + weatherApi.WeatherForecast.city.name.ToString();
+            textLocationInformation.Text = "Seems like you're in " + weatherApi.WeatherForecast.city.name.ToString() + ".";
+
+            // initialise weather summary string
             String weatherSummary = "There will be ";
 
+            // initialise holding vars for min and max temperature
             double minTemp = 500.0;
             double maxTemp = 0.0;
-
 
             // get dictionary to fill all forecasted weather states
             Dictionary<string, int> weatherDictionary = new Dictionary<string, int>();
             // iterate through all forecasted weather nodes
             for (int i = 0; i < weatherApi.WeatherForecast.list.Count; i++)
             {
-                if (weatherApi.WeatherForecast.list[i].main.temp_min < minTemp) minTemp = weatherApi.WeatherForecast.list[i].main.temp_min;
-                if (weatherApi.WeatherForecast.list[i].main.temp_max > maxTemp) maxTemp = weatherApi.WeatherForecast.list[i].main.temp_max;
+                // check for min / max temo
+                // note that we're only interested in the "near" future
+                // hence we're only checking the first 5 entries at most
+                if (i < 5)
+                {
+                    if (weatherApi.WeatherForecast.list[i].main.temp_min < minTemp) minTemp = weatherApi.WeatherForecast.list[i].main.temp_min;
+                    if (weatherApi.WeatherForecast.list[i].main.temp_max > maxTemp) maxTemp = weatherApi.WeatherForecast.list[i].main.temp_max;
+                }
 
                 // check if the weather state is already known
                 if (!weatherDictionary.ContainsKey(weatherApi.WeatherForecast.list[i].weather[0].description.ToString()))
@@ -113,10 +128,10 @@ namespace ConversationalWeather
                 }
             }
 
-            // create a local counter
-            int j = 1;
-
             // loop through all found weather states
+            // we only need the weather states once
+            // this will determine the icons and states to show on screen
+            int j = 1;
             foreach (KeyValuePair<string, int> pair in weatherDictionary)
             {
                 // increase the counter
@@ -147,7 +162,8 @@ namespace ConversationalWeather
             // display the aggregated weather summary
             textWeatherForecast.Text = weatherSummary + " later.";
 
-            textTemperatureInformation.Text = "The temperature will be between " + minTemp + "°C and " + maxTemp + "°C.";
+            // display temperature data
+            textTemperatureInformation.Text = "The temperature will be between " + Convert.ToInt16(minTemp) + "°F and " + Convert.ToInt16(maxTemp) + "°F.";
         }
 
         // this will load a weather icon
@@ -222,6 +238,14 @@ namespace ConversationalWeather
         public void StatusChanged()
         {
             textLocationInformation.Text = weatherApi.Status;
+        }
+
+        private void TemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            // set temperature flag accordingly
+            weatherApi.useCelsius = temperatureUnit.IsOn;
+
+            // TODO: Directly reload data?!
         }
     }
 }

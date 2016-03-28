@@ -28,10 +28,13 @@ namespace ConversationalWeather.WeatherAPI
         // flag to indicate that weather data is known
         public Boolean weatherDataLoaded = false;
 
+        // flag to indicate temperature units
+        public Boolean useCelsius = true;
+
         // contains the found geolocation
         private Geoposition _currentPosition;
 
-        // cotnains the status of the geolocation tracking
+        // contains the status of the geolocation tracking
         private String _status = "";
 
         // object containing the returned weather data
@@ -42,6 +45,7 @@ namespace ConversationalWeather.WeatherAPI
         {
             geopositionKnown = false;
             weatherDataLoaded = false;
+            useCelsius = true;
 
             // create an HttpClient instance with default settings. I.e. no custom filters. 
             filter = new HttpBaseProtocolFilter();
@@ -186,8 +190,14 @@ namespace ConversationalWeather.WeatherAPI
                 String weatherApiUrl = "http://api.openweathermap.org/data/2.5/forecast";
                 weatherApiUrl += "?lat=" + CurrentPosition.Coordinate.Latitude.ToString();
                 weatherApiUrl += "&lon=" + CurrentPosition.Coordinate.Longitude.ToString();
-                weatherApiUrl += "&units=metric";
                 weatherApiUrl += "&APPID=60c2636cd48cde2176af74be0d397d00";
+
+                // check which temperature unit to use
+                // note that in case of Fahrenheit, we don't need to add anything
+                if (useCelsius)
+                {
+                    weatherApiUrl += "&units=metric";
+                }
 #endif
 
                 // set status to loading
