@@ -10,6 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenWeatherMapMock", "OpenWeatherMapMock", "{9812ADCF-A83A-4938-B345-AB43BF7041B1}"
+	ProjectSection(SolutionItems) = preProject
+		OpenWeatherMapMock\openweathermap_mock.js = OpenWeatherMapMock\openweathermap_mock.js
+		OpenWeatherMapMock\package.json = OpenWeatherMapMock\package.json
+		OpenWeatherMapMock\README.md = OpenWeatherMapMock\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM

@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
-using Windows.Security.Cryptography.Certificates;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ConversationalWeather.Objects;
 
 namespace ConversationalWeather.WeatherAPI
@@ -27,8 +22,11 @@ namespace ConversationalWeather.WeatherAPI
         private HttpBaseProtocolFilter filter;
         private HttpClient httpClient;
 
-        // flag to indicate if geolocation is locked / known
-        public Boolean geopositionLocked = false;
+        // flag to indicate that geolocation is known
+        public Boolean geopositionKnown = false;
+
+        // flag to indicate that weather data is known
+        public Boolean weatherDataLoaded = false;
 
         // contains the found geolocation
         private Geoposition _currentPosition;
@@ -42,7 +40,8 @@ namespace ConversationalWeather.WeatherAPI
         // constructor
         public WeatherInterface()
         {
-            geopositionLocked = false;
+            geopositionKnown = false;
+            weatherDataLoaded = false;
 
             // create an HttpClient instance with default settings. I.e. no custom filters. 
             filter = new HttpBaseProtocolFilter();
@@ -56,11 +55,12 @@ namespace ConversationalWeather.WeatherAPI
             set
             {
                 // we have a geolocation locked now
-                geopositionLocked = true;
+                geopositionKnown = true;
 
                 // store the data
                 _currentPosition = value;
 
+                // load weather data from server
                 this.GetWeatherForcastForGeoposition();
 
                 // call the OnPropertyChanged callback to indicate new data
@@ -88,6 +88,9 @@ namespace ConversationalWeather.WeatherAPI
             get { return _weatherForecast; }
             set
             {
+                // we have weather data now
+                weatherDataLoaded = true;
+
                 // store the data
                 _weatherForecast = value;
 
@@ -97,7 +100,7 @@ namespace ConversationalWeather.WeatherAPI
         }
 
         // create the OnPropertyChanged method to raise the event
-        protected void OnPropertyChanged(string name)
+        public void OnPropertyChanged(string name)
         {
             // get the handler for the event
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -139,13 +142,13 @@ namespace ConversationalWeather.WeatherAPI
 
                     // if the user denied the access
                     case GeolocationAccessStatus.Denied:
-                        geopositionLocked = false;
+                        geopositionKnown = false;
                         Status = "Access to location is denied.";
                         break;
 
                     // if something else went wrong
                     case GeolocationAccessStatus.Unspecified:
-                        geopositionLocked = false;
+                        geopositionKnown = false;
                         Status = "Unspecified geolocation tracking error.";
                         break;
                 }
@@ -153,19 +156,19 @@ namespace ConversationalWeather.WeatherAPI
             // user cancelled request
             catch (TaskCanceledException)
             {
-                geopositionLocked = false;
+                geopositionKnown = false;
                 Status = "Geolocation tracking cancelled.";
             }
             // exception was caught
             catch (Exception ex)
             {
-                geopositionLocked = false;
+                geopositionKnown = false;
                 Status = "General error when tracking geolocation: " + ex.ToString();
             }
             // done
             finally
             {
-                geopositionLocked = false;
+                geopositionKnown = false;
                 _cts = null;
             }
         }
@@ -176,11 +179,16 @@ namespace ConversationalWeather.WeatherAPI
         {
             try
             {
+#if DEBUG
+                String weatherApiUrl = "http://localhost:8888/forecast.json";
+#else
                 // create URL for getting forcast
                 String weatherApiUrl = "http://api.openweathermap.org/data/2.5/forecast";
                 weatherApiUrl += "?lat=" + CurrentPosition.Coordinate.Latitude.ToString();
                 weatherApiUrl += "&lon=" + CurrentPosition.Coordinate.Longitude.ToString();
+                weatherApiUrl += "&units=metric";
                 weatherApiUrl += "&APPID=60c2636cd48cde2176af74be0d397d00";
+#endif
 
                 // set status to loading
                 Status = "Loading weather data";

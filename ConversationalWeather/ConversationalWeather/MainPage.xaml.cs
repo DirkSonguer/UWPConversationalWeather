@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.ViewManagement;
 using ConversationalWeather.WeatherAPI;
 using Windows.Storage;
 
-// Die Vorlage "Leere Seite" ist unter http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 dokumentiert.
-
 namespace ConversationalWeather
 {
     /// <summary>
-    /// Eine leere Seite, die eigenständig verwendet oder zu der innerhalb eines Rahmens navigiert werden kann.
+    /// This is the main page showing the main weather text
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        // weather api class singleton
         WeatherInterface weatherApi = new WeatherInterface();
 
+        // dictionary that contains all the weather icons
         Dictionary<int, Image> weatherIconDictionary = new Dictionary<int, Image>();
 
         public MainPage()
@@ -44,9 +45,21 @@ namespace ConversationalWeather
             imageWeatherIcon3.Width = (bounds.Width / 4.5);
             imageWeatherIcon4.Width = (bounds.Width / 4.5);
 
-            // get current geolocation
-            // note that his will trigger a weather forecast for this location
-            weatherApi.GetCurrentLocation();
+            // add tap event to switch page
+//            pageGrid.Tapped += new TappedEventHandler(this.SwitchPage);
+
+            // check if weather data is already loaded
+            if (!weatherApi.weatherDataLoaded)
+            {
+                // if not, first get current geolocation
+                // note that his will trigger a weather forecast for this location
+                weatherApi.GetCurrentLocation();
+            }
+            else
+            {
+                // just use the preloaded data and populate the components again
+                this.WeatherForecastLoaded();
+            }
         }
 
         // weather data has changed
@@ -67,6 +80,8 @@ namespace ConversationalWeather
 
         public void GeopositionFound()
         {
+            // the weatherAPI class will start loading the weather data in the background
+            // so we just show the status
             textLocationInformation.Text = "Loading weather information";
         }
 
@@ -78,11 +93,18 @@ namespace ConversationalWeather
             textLocationInformation.Text = "Seems like you're in " + weatherApi.WeatherForecast.city.name.ToString();
             String weatherSummary = "There will be ";
 
+            double minTemp = 500.0;
+            double maxTemp = 0.0;
+
+
             // get dictionary to fill all forecasted weather states
             Dictionary<string, int> weatherDictionary = new Dictionary<string, int>();
             // iterate through all forecasted weather nodes
             for (int i = 0; i < weatherApi.WeatherForecast.list.Count; i++)
             {
+                if (weatherApi.WeatherForecast.list[i].main.temp_min < minTemp) minTemp = weatherApi.WeatherForecast.list[i].main.temp_min;
+                if (weatherApi.WeatherForecast.list[i].main.temp_max > maxTemp) maxTemp = weatherApi.WeatherForecast.list[i].main.temp_max;
+
                 // check if the weather state is already known
                 if (!weatherDictionary.ContainsKey(weatherApi.WeatherForecast.list[i].weather[0].description.ToString()))
                 {
@@ -123,7 +145,9 @@ namespace ConversationalWeather
             }
 
             // display the aggregated weather summary
-            textWeatherInformation.Text = weatherSummary + " later.";
+            textWeatherForecast.Text = weatherSummary + " later.";
+
+            textTemperatureInformation.Text = "The temperature will be between " + minTemp + "°C and " + maxTemp + "°C.";
         }
 
         // this will load a weather icon
