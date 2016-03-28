@@ -5,7 +5,6 @@ using System.IO;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.ViewManagement;
 using ConversationalWeather.WeatherAPI;
 using Windows.Storage;
@@ -46,26 +45,23 @@ namespace ConversationalWeather
             imageWeatherIcon4.Width = (bounds.Width / 4.5);
 
             // add double tap event to switch page
-            pageGrid.DoubleTapped += new DoubleTappedEventHandler(this.reloadWeatherData);
+            pageGrid.DoubleTapped += new DoubleTappedEventHandler(this.loadWeatherData);
 
-            // check if weather data is already loaded
-            if (!weatherApi.weatherDataLoaded)
-            {
-                // if not, first get current geolocation
-                // note that his will trigger a weather forecast for this location
-                weatherApi.GetCurrentLocation();
-            }
-            else
-            {
-                // just use the preloaded data and populate the components again
-                this.WeatherForecastLoaded();
-            }
+            // load the weather data
+            this.loadWeatherData(null, null);
         }
 
-        public void reloadWeatherData(object sender, DoubleTappedRoutedEventArgs e)
+        // trigger to reload the weather data
+        // this will also take care of resetting the UI
+        public void loadWeatherData(object sender, DoubleTappedRoutedEventArgs e)
         {
-            // TODO: clear data
-            // TODO: show loading
+            // hide UI and show loader
+            rootPivot.Items.Remove(pivotTemperatureItem);
+            panelContent.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            // first get current geolocation
+            // note that his will trigger a weather forecast for this location
             weatherApi.GetCurrentLocation();
         }
 
@@ -164,6 +160,11 @@ namespace ConversationalWeather
 
             // display temperature data
             textTemperatureInformation.Text = "The temperature will be between " + Convert.ToInt16(minTemp) + "°F and " + Convert.ToInt16(maxTemp) + "°F.";
+
+            // hide the loader and show UI elements for data
+            panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            rootPivot.Items.Insert(1, pivotTemperatureItem);
         }
 
         // this will load a weather icon
@@ -224,10 +225,12 @@ namespace ConversationalWeather
                     int rawWeatherCode = Convert.ToInt16(result[0]);
                     int baseWeatherCode = Convert.ToInt16(rawWeatherCode / 100) * 100;
 
-                    // done, try loading it again
-                    // also note the recursion flag
+                    // check if the code has changed
+                    // this will make sure that we really found a new base code and will not try to load the same file again
                     if (baseWeatherCode != rawWeatherCode)
                     {
+                        // try loading the new base code
+                        // also note the recursion flag
                         this.selectWeatherIcon(baseWeatherCode.ToString(), weatherIconIndex, false);
                     }
                 }
@@ -235,17 +238,17 @@ namespace ConversationalWeather
         }
 
         // show status message
+        // this will happen mostly during loading so we just update the loading status
         public void StatusChanged()
         {
-            textLocationInformation.Text = weatherApi.Status;
+            // set loading status text
+            textLoadingStatus.Text = weatherApi.Status;
         }
 
-        private void TemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void ToggleTemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // set temperature flag accordingly
-            weatherApi.useCelsius = temperatureUnit.IsOn;
-
-            // TODO: Directly reload data?!
+            weatherApi.useCelsius = toggleTemperatureUnit.IsOn;
         }
     }
 }

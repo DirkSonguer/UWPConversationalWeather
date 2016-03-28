@@ -181,6 +181,9 @@ namespace ConversationalWeather.WeatherAPI
         // this will use Windows.Devices.Geolocation to query the current location 
         async public void GetWeatherForcastForGeoposition()
         {
+            // set status to loading
+            Status = "Loading weather data";
+
             try
             {
 #if DEBUG
@@ -200,20 +203,20 @@ namespace ConversationalWeather.WeatherAPI
                 }
 #endif
 
-                // set status to loading
-                Status = "Loading weather data";
-
                 // load weather forcast data
                 Uri myUri = new Uri(weatherApiUrl, UriKind.Absolute);
                 HttpResponseMessage response = await httpClient.GetAsync(myUri).AsTask(_cts.Token);
 
                 // convert json data to object
                 WeatherForecast = JsonConvert.DeserializeObject<WeatherForecastObject>(response.Content.ToString());
+
+                // set status that weather data was found
+                Status = "Weather data received";
             }
             // exception was caught
             catch (Exception ex)
             {
-                Status = "A problem occured during loading and converting the weather data: " + ex.ToString();
+                Status = "A problem occured during loading and converting the weather data.\nPlease make sure you are connected to the internet.\nDouble tap to try again.";
             }
         }
     }

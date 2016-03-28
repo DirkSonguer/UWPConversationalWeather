@@ -23,7 +23,7 @@ function init() {
     });
 
     var server = app.listen("8888", function () {
-        console.log('Themis Content Storage listening..');
+        console.log('Open Weather Map mock is listening..');
     });
 
 }
