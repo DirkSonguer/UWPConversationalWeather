@@ -124,9 +124,6 @@ namespace ConversationalWeather
             // update active tile with new data
             this.UpdateActiveTile();
 
-            BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, mainWeatherIcon));
-            imageTemperatureIcon1.Source = bitmapImage;
-
             // hide the loader and show UI elements for data
             panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
             panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -155,7 +152,12 @@ namespace ConversationalWeather
                 // set main weather icon
                 if (weatherIconIndex == 0)
                 {
+                    // set variable
                     mainWeatherIcon = "/Assets/WeatherIcons/" + weatherCode + ".png";
+
+                    // also update image temperature icon
+                    bitmapImage = new BitmapImage(new Uri(this.BaseUri, mainWeatherIcon));
+                    imageTemperatureIcon1.Source = bitmapImage;
                 }
             }
             catch (FileNotFoundException ex)
@@ -267,7 +269,15 @@ namespace ConversationalWeather
         {
             // set url and launch app registered with handling URIs
             Uri uriAuthor = new Uri(@"http://dirk.songuer.de");
-            Boolean success = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+        }
+
+        // application information label was tapped
+        async private void labelAboutApplication_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            // set url and launch app registered with handling URIs
+            Uri uriAuthor = new Uri(@"https://github.com/DirkSonguer/UWPConversationalWeather");
+            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
         }
     }
 }
