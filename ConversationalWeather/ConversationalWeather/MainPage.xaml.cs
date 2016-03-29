@@ -261,5 +261,13 @@ namespace ConversationalWeather
             // this basically leads to a smooth transition from one color to the next when switching pivot items
             rootPivot.Background = (rootPivot.Items[rootPivot.SelectedIndex] as PivotItem).Background;
         }
+
+        // author information label was tapped
+        async private void labelAboutAuthor_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            // set url and launch app registered with handling URIs
+            Uri uriAuthor = new Uri(@"http://dirk.songuer.de");
+            Boolean success = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+        }
     }
 }

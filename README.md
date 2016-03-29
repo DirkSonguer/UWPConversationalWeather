@@ -1,4 +1,4 @@
-# ConversationalWeather: Glanceable weather information to prepare you for the day
+# Conversational Weather: Glanceable weather information to prepare you for the day
 
 This is a simple, native weather app for Windows 10 Mobile, made with UWP.
 It uses OpenWeatherMap to pull the weather data and the Meteocons icon
