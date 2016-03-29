@@ -43,6 +43,7 @@ namespace ConversationalWeather.WeatherAPI
         // constructor
         public WeatherInterface()
         {
+            // set initial values for flags
             geopositionKnown = false;
             weatherDataLoaded = false;
             useCelsius = true;
@@ -58,17 +59,37 @@ namespace ConversationalWeather.WeatherAPI
             get { return _currentPosition; }
             set
             {
+                // set status that geolocation was found
+                Status = "Found your position.";
+
                 // we have a geolocation locked now
                 geopositionKnown = true;
 
                 // store the data
                 _currentPosition = value;
 
-                // load weather data from server
-                this.GetWeatherForcastForGeoposition();
-
                 // call the OnPropertyChanged callback to indicate new data
                 this.OnPropertyChanged("CurrentPosition");
+            }
+        }
+
+        // setter / getter for the weather data response
+        public WeatherForecastObject WeatherForecast
+        {
+            get { return _weatherForecast; }
+            set
+            {
+                // set status that weather data was found
+                Status = "Weather data received.";
+
+                // we have weather data now
+                weatherDataLoaded = true;
+
+                // store the data
+                _weatherForecast = value;
+
+                // call the OnPropertyChanged callback to indicate new data
+                this.OnPropertyChanged("WeatherForecast");
             }
         }
 
@@ -83,23 +104,6 @@ namespace ConversationalWeather.WeatherAPI
 
                 // call the OnPropertyChanged callback to indicate new data
                 this.OnPropertyChanged("Status");
-            }
-        }
-
-        // setter / getter for the weather data response
-        public WeatherForecastObject WeatherForecast
-        {
-            get { return _weatherForecast; }
-            set
-            {
-                // we have weather data now
-                weatherDataLoaded = true;
-
-                // store the data
-                _weatherForecast = value;
-
-                // call the OnPropertyChanged callback to indicate new data
-                this.OnPropertyChanged("WeatherForecast");
             }
         }
 
@@ -121,7 +125,7 @@ namespace ConversationalWeather.WeatherAPI
         {
             try
             {
-                Status = "Trying to get your location";
+                Status = "Trying to get your location.";
 
                 // request permission to access location
                 var accessStatus = await Geolocator.RequestAccessAsync();
@@ -139,9 +143,9 @@ namespace ConversationalWeather.WeatherAPI
                         // if DesiredAccuracy or DesiredAccuracyInMeters are not set (or value is 0), DesiredAccuracy.Default is used.
                         Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
 
-                        // try to get the geolocation and set it to the property
+                        // try to get the geolocation
+                        // if successful this will change the CurrentPosition property
                         CurrentPosition = await geolocator.GetGeopositionAsync().AsTask(token);
-                        Status = "Ok, found your position";
                         break;
 
                     // if the user denied the access
@@ -182,7 +186,7 @@ namespace ConversationalWeather.WeatherAPI
         async public void GetWeatherForcastForGeoposition()
         {
             // set status to loading
-            Status = "Loading weather data";
+            Status = "Loading weather data.";
 
             try
             {
@@ -196,10 +200,12 @@ namespace ConversationalWeather.WeatherAPI
                 weatherApiUrl += "&APPID=60c2636cd48cde2176af74be0d397d00";
 
                 // check which temperature unit to use
-                // note that in case of Fahrenheit, we don't need to add anything
+                // note that the default for the API is Kelvin
                 if (useCelsius)
                 {
                     weatherApiUrl += "&units=metric";
+                } else {
+                    weatherApiUrl += "&units=imperial";
                 }
 #endif
 
@@ -208,10 +214,8 @@ namespace ConversationalWeather.WeatherAPI
                 HttpResponseMessage response = await httpClient.GetAsync(myUri).AsTask(_cts.Token);
 
                 // convert json data to object
+                // if successful this will change the WeatherForecast property
                 WeatherForecast = JsonConvert.DeserializeObject<WeatherForecastObject>(response.Content.ToString());
-
-                // set status that weather data was found
-                Status = "Weather data received";
             }
             // exception was caught
             catch (Exception ex)

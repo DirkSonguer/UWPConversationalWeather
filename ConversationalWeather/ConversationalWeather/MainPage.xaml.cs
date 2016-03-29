@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.IO;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
 using ConversationalWeather.WeatherAPI;
@@ -84,9 +83,8 @@ namespace ConversationalWeather
 
         public void GeopositionFound()
         {
-            // the weatherAPI class will start loading the weather data in the background
-            // so we just show the status
-            textLocationInformation.Text = "Loading weather information";
+            // load weather data from server
+            weatherApi.GetWeatherForcastForGeoposition();
         }
 
         // weather data was received
