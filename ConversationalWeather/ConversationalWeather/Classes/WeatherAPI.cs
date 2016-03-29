@@ -139,7 +139,6 @@ namespace ConversationalWeather.WeatherAPI
                 {
                     // in case the user allowed it, start searching for the location
                     case GeolocationAccessStatus.Allowed:
-
                         // get cancellation token
                         _cts = new CancellationTokenSource();
                         CancellationToken token = _cts.Token;
@@ -316,7 +315,113 @@ namespace ConversationalWeather.WeatherAPI
         // aggregate and create the temperature hint text
         public String GetTemperatureHint()
         {
-            return "Lorem ipsum dolor sit amet.";
+            // initialise temperature hint string
+            String temperatureHint = "";
+
+            // note that all the groups are defined weather conditions by OpenWeatherMap
+            // http://openweathermap.org/weather-conditions
+
+            // group 2xx: thunderstorm
+            if ((WeatherForecast.list[0].weather[0].id >= 200) && (WeatherForecast.list[0].weather[0].id <= 299))
+            {
+                temperatureHint += "There is a " + WeatherForecast.list[0].weather[0].description + " going on. Or will be soon. Better get inside!";
+            }
+
+            // group 3xx: drizzle
+            if ((WeatherForecast.list[0].weather[0].id >= 300) && (WeatherForecast.list[0].weather[0].id <= 399))
+            {
+                temperatureHint += "Drip, drop, " + WeatherForecast.list[0].weather[0].description + " outside. Better bring an umbrella.";
+            }
+
+            // group 5xx: rain
+            if ((WeatherForecast.list[0].weather[0].id >= 500) && (WeatherForecast.list[0].weather[0].id <= 600))
+            {
+                temperatureHint += "Meh, " + WeatherForecast.list[0].weather[0].description + " outside or coming up. Better get somewhere dry.";
+            }
+
+            // group 6xx: snow
+            if ((WeatherForecast.list[0].weather[0].id >= 600) && (WeatherForecast.list[0].weather[0].id <= 699))
+            {
+                temperatureHint += "Brr, there is " + WeatherForecast.list[0].weather[0].description + " outside. Keep yourself warm.";
+            }
+
+            // group 7xx: atmosphere
+            if ((WeatherForecast.list[0].weather[0].id >= 700) && (WeatherForecast.list[0].weather[0].id <= 799))
+            {
+                temperatureHint += "Oh! A bit of " + WeatherForecast.list[0].weather[0].description + "! Really?";
+            }
+
+            // group 800: clear
+            if (WeatherForecast.list[0].weather[0].id == 800)
+            {
+                temperatureHint += "All is clear, nothing to see.";
+            }
+
+            // group 80x: clouds
+            if ((WeatherForecast.list[0].weather[0].id >= 801) && (WeatherForecast.list[0].weather[0].id <= 899))
+            {
+                temperatureHint = "It's cloudy. Just some " + WeatherForecast.list[0].weather[0].description + ".";
+            }
+
+            // group 9xx: extreme
+            if ((WeatherForecast.list[0].weather[0].id >= 900) && (WeatherForecast.list[0].weather[0].id <= 999))
+            {
+                temperatureHint = "Oh? Wow!. Be careful out there!";
+            }
+
+            int celsiusTemperature = 0;
+            celsiusTemperature = Convert.ToInt16(WeatherForecast.list[0].main.temp);
+            if (!useCelsius) celsiusTemperature = Convert.ToInt16((WeatherForecast.list[0].main.temp - 32) * 5 / 9);
+
+            temperatureHint += " And it's ";
+
+            // VERY cold
+            if (celsiusTemperature < -10)
+            {
+                temperatureHint += "really COLD!";
+            }
+
+            // very cold
+            if ((celsiusTemperature >= -10) && (celsiusTemperature < 0))
+            {
+                temperatureHint += "pretty cold.";
+            }
+
+            // cold
+            if ((celsiusTemperature >= 0) && (celsiusTemperature < 10))
+            {
+                temperatureHint += "a bit cold";
+            }
+
+            // a bit chilly
+            if ((celsiusTemperature >= 10) && (celsiusTemperature < 20))
+            {
+                temperatureHint += "a bit chilly";
+            }
+
+            // cold
+            if ((celsiusTemperature >= 20) && (celsiusTemperature < 30))
+            {
+                temperatureHint += "quite nice";
+            }
+
+            // really hot
+            if ((celsiusTemperature >= 30) && (celsiusTemperature < 40))
+            {
+                temperatureHint += "pretty hot";
+            }
+
+            // REALLY hot
+            if (celsiusTemperature >= 40)
+            {
+                temperatureHint += "really HOT";
+            }
+
+            // finish temperature hint
+            temperatureHint += " outside.";
+
+            // done
+            return temperatureHint;
         }
     }
 }

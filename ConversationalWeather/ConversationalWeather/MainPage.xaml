@@ -32,6 +32,9 @@
                     <TextBlock x:Name="textTemperatureInformation" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
                     <TextBlock x:Name="textTemperatureHint" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                 </StackPanel>
+                <StackPanel Margin="0,20,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Image x:Name="imageTemperatureIcon1" Margin="0,0,0,0" Height="200" HorizontalAlignment="Center" Opacity="0.15" />
+                </StackPanel>
             </Grid>
         </PivotItem>
         <PivotItem Background="Tomato">
@@ -43,6 +46,7 @@
                         <ToggleSwitch x:Name="toggleTemperatureUnit" Header="Temperature units" Toggled="ToggleTemperatureUnit_Toggled" OffContent="Fahrenheit" OnContent="Celsius" RequestedTheme="Dark" IsOn="True" UseSystemFocusVisuals="True" />
                     </StackPanel>
                     <TextBlock Margin="0,20,0,0"  Foreground="White" TextWrapping="WrapWholeWords" Text="Conversational Weather uses the free Open Weather Maps API to acquire the weather data for your current location. It also uses the wonderful Meteocons icon set for the weather state icons. Everything else is lovingly hand-crafted and available as open source on GitHub." HorizontalAlignment="Left" FontSize="14" FontWeight="Light"/>
+                    <Image Margin="0,10,0,0" Width="155" Source="Assets/Wide310x150Logo.scale-200.png" HorizontalAlignment="Center" Opacity="0.15" />
                 </StackPanel>
             </Grid>
         </PivotItem>

@@ -124,6 +124,9 @@ namespace ConversationalWeather
             // update active tile with new data
             this.UpdateActiveTile();
 
+            BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, mainWeatherIcon));
+            imageTemperatureIcon1.Source = bitmapImage;
+
             // hide the loader and show UI elements for data
             panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
             panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -224,7 +227,7 @@ namespace ConversationalWeather
             xmlDocumentContent = xmlDocumentContent.Replace("{{TileCurrentTemperature}}", temperatureText);
 
             // set the current weather forecast text
-            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherApi.GetWeatherForecastText());
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherApi.GetTemperatureHint());
 
             // convert xml template (string) into a proper xml object
             var xmlTileData = new Windows.Data.Xml.Dom.XmlDocument();
