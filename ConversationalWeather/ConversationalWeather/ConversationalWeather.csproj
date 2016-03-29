@@ -114,6 +114,7 @@
     <None Include="ConversationalWeather_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\ActiveTile\ActiveTileTemplate.xml" />
     <Content Include="Assets\WeatherIcons\200.png" />
     <Content Include="Assets\WeatherIcons\201.png" />
     <Content Include="Assets\WeatherIcons\202.png" />

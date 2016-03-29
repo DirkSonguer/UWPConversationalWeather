@@ -30,7 +30,7 @@
       },
       weather: [
         {
-          id: 800,
+          id: 500,
           main: "Clear",
           description: "clear sky",
           icon: "01n"
@@ -63,7 +63,7 @@
       },
       weather: [
         {
-          id: 800,
+          id: 500,
           main: "Clear",
           description: "clear sky",
           icon: "01d"

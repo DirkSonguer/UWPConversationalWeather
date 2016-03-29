@@ -316,7 +316,7 @@ namespace ConversationalWeather.WeatherAPI
         // aggregate and create the temperature hint text
         public String GetTemperatureHint()
         {
-            return "Hello.";
+            return "Lorem ipsum dolor sit amet.";
         }
     }
 }

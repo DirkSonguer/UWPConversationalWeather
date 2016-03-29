@@ -7,14 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Pivot x:Name="rootPivot" Foreground="White" Background="Tan" SelectionChanged="RootPivot_SelectionChanged">
+    <Pivot x:Name="rootPivot" Title="Conversational Weather" Foreground="White" Background="Tan" SelectionChanged="RootPivot_SelectionChanged">
         <PivotItem Background="CadetBlue" >
-            <Grid x:Name="pageGrid" Background="CadetBlue" Margin="-15,-48,-15,0">
-                <StackPanel x:Name="panelLoadingProgress" Margin="15,48,15,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid x:Name="pageGrid" Background="CadetBlue" Margin="0,-48,0,0">
+                <StackPanel x:Name="panelLoadingProgress" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <ProgressRing RequestedTheme="Dark" IsActive="True" Foreground="White" />
                     <TextBlock x:Name="textLoadingStatus" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="18" FontWeight="Light"/>
                 </StackPanel>
-                <StackPanel x:Name="panelContent" Margin="15,15,15,0" VerticalAlignment="Top" Visibility="Collapsed">
+                <StackPanel x:Name="panelContent" Margin="0,0,0,0" VerticalAlignment="Top" Visibility="Collapsed">
                     <TextBlock x:Name="textLocationInformation" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
                     <TextBlock x:Name="textWeatherForecast" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                     <StackPanel x:Name="imagePanel" Margin="0,20,0,0" VerticalAlignment="Top" Orientation="Horizontal">
@@ -27,16 +27,16 @@
             </Grid>
         </PivotItem>
         <PivotItem x:Name="pivotTemperatureItem" Background="Teal">
-            <Grid Background="Teal" Margin="-15,-48,-15,0">
-                <StackPanel Margin="15,15,15,0" VerticalAlignment="Top">
+            <Grid Background="Teal" Margin="0,-48,0,0">
+                <StackPanel Margin="0,0,0,0" VerticalAlignment="Top">
                     <TextBlock x:Name="textTemperatureInformation" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
                     <TextBlock x:Name="textTemperatureHint" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                 </StackPanel>
             </Grid>
         </PivotItem>
         <PivotItem Background="Tomato">
-            <Grid Background="Tomato" Margin="-15,-48,-15,0">
-                <StackPanel Margin="15,15,15,0" VerticalAlignment="Top">
+            <Grid Background="Tomato" Margin="0,-48,0,0">
+                <StackPanel Margin="00,0,00,0" VerticalAlignment="Top">
                     <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="A little app by Dirk Songuer." HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
                     <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="This application will not send or store any personal data." HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                     <StackPanel Margin="0,30,0,0" VerticalAlignment="Top">

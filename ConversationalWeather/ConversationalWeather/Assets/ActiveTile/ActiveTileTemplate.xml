@@ -1,0 +1,37 @@
+﻿<tile>
+  <visual>
+
+    <binding template="TileSmall">
+      <image src="{{TileWeatherStateIcon}}" hint-crop="circle" />
+    </binding>
+
+    <binding template="TileMedium" branding="name" displayName="{{TileCurrentTemperature}}">
+      <image src="{{TileWeatherStateIcon}}" hint-crop="circle" />
+    </binding>
+
+    <binding template="TileWide" branding="name">
+      <group>
+        <subgroup hint-weight="26">
+          <image src="{{TileWeatherStateIcon}}" hint-crop="circle" />
+        </subgroup>
+        <subgroup hint-textStacking="center">
+          <text hint-style="subtitle" hint-wrap="true">{{TileCurrentTemperature}}</text>
+          <text hint-style="bodySubtle" hint-wrap="true">{{TileForecast}}</text>
+        </subgroup>
+      </group>
+    </binding>
+
+    <binding template="TileLarge" branding="name">
+      <group>
+        <subgroup hint-weight="26">
+          <image src="{{TileWeatherStateIcon}}" hint-crop="circle" />
+        </subgroup>
+        <subgroup hint-textStacking="center">
+          <text hint-style="subtitle" hint-wrap="true">{{TileCurrentTemperature}}</text>
+          <text hint-style="bodySubtle" hint-wrap="true">{{TileForecast}}</text>
+        </subgroup>
+      </group>
+    </binding>
+
+  </visual>
+</tile>
