@@ -32,10 +32,10 @@ namespace ConversationalWeather
 
             // create dictionary for images
             // this is basically a fake list
-            weatherIconDictionary.Add(1, imageWeatherIcon1);
-            weatherIconDictionary.Add(2, imageWeatherIcon2);
-            weatherIconDictionary.Add(3, imageWeatherIcon3);
-            weatherIconDictionary.Add(4, imageWeatherIcon4);
+            weatherIconDictionary.Add(0, imageWeatherIcon1);
+            weatherIconDictionary.Add(1, imageWeatherIcon2);
+            weatherIconDictionary.Add(2, imageWeatherIcon3);
+            weatherIconDictionary.Add(3, imageWeatherIcon4);
 
             // set icon size to quarter of the screen width
             Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
@@ -91,77 +91,31 @@ namespace ConversationalWeather
         // it's now available in weatherApi.WeatherForecast
         public void WeatherForecastLoaded()
         {
-            // show location string
-            textLocationInformation.Text = "Seems like you're in " + weatherApi.WeatherForecast.city.name.ToString() + ".";
-
-            // initialise weather summary string
-            String weatherSummary = "There will be ";
-
-            // initialise holding vars for min and max temperature
-            double minTemp = 500.0;
-            double maxTemp = 0.0;
-
-            // get dictionary to fill all forecasted weather states
-            Dictionary<string, int> weatherDictionary = new Dictionary<string, int>();
-            // iterate through all forecasted weather nodes
-            for (int i = 0; i < weatherApi.WeatherForecast.list.Count; i++)
-            {
-                // check for min / max temo
-                // note that we're only interested in the "near" future
-                // hence we're only checking the first 5 entries at most
-                if (i < 5)
-                {
-                    if (weatherApi.WeatherForecast.list[i].main.temp_min < minTemp) minTemp = weatherApi.WeatherForecast.list[i].main.temp_min;
-                    if (weatherApi.WeatherForecast.list[i].main.temp_max > maxTemp) maxTemp = weatherApi.WeatherForecast.list[i].main.temp_max;
-                }
-
-                // check if the weather state is already known
-                if (!weatherDictionary.ContainsKey(weatherApi.WeatherForecast.list[i].weather[0].description.ToString()))
-                {
-                    // if not known yet, add the weather state to the dictionary
-                    weatherDictionary.Add(weatherApi.WeatherForecast.list[i].weather[0].description.ToString(), weatherApi.WeatherForecast.list[i].weather[0].id);
-                }
-            }
-
-            // loop through all found weather states
-            // we only need the weather states once
-            // this will determine the icons and states to show on screen
-            int j = 1;
-            foreach (KeyValuePair<string, int> pair in weatherDictionary)
-            {
-                // increase the counter
-                // note that this runs one in front of the item count
-                j++;
-
-                // store the weather state in the summary string
-                weatherSummary += pair.Key;
-
-                // check if this is an item in the middle
-                if (j < weatherDictionary.Count)
-                {
-                    weatherSummary += ", ";
-                }
-                // or the last item in the dictionary
-                else if (j == weatherDictionary.Count)
-                {
-                    weatherSummary += " and then ";
-                }
-
-                // the first 4 items should display a matching icon
-                if (j <= 5)
-                {
-                    this.selectWeatherIcon(pair.Value.ToString(), (j - 1), false);
-                }
-            }
-
+            // display location string
+            textLocationInformation.Text = weatherApi.GetLocationInformation();
+            
             // display the aggregated weather summary
-            textWeatherForecast.Text = weatherSummary + " later.";
+            textWeatherForecast.Text = weatherApi.GetWeatherForecastText();
 
-            // display temperature data
-            // note that we change the temperature unit sign according to the chosen one
-            String temperatureUnitSign = "°F";
-            if (weatherApi.useCelsius) temperatureUnitSign = "°C";
-            textTemperatureInformation.Text = "The temperature will be between " + Convert.ToInt16(minTemp) + temperatureUnitSign + " and " + Convert.ToInt16(maxTemp) + temperatureUnitSign + ".";
+            // display temperature information
+            textTemperatureInformation.Text = weatherApi.GetTemperatureInformation();
+
+            // display temperature hint
+            textTemperatureHint.Text = weatherApi.GetTemperatureHint();
+
+            // loop through all found weather states and select matching icon
+            int i = 0;
+            foreach (KeyValuePair<string, int> pair in weatherApi.weatherForecastStates)
+            {                
+                // the first 4 items should display a matching icon
+                if (i < 4)
+                {
+                    this.selectWeatherIcon(pair.Value.ToString(), (i), false);
+                }
+
+                // increase the counter
+                i++;
+            }
 
             // hide the loader and show UI elements for data
             panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;

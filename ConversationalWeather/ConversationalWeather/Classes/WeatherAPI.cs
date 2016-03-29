@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,6 +40,9 @@ namespace ConversationalWeather.WeatherAPI
 
         // object containing the returned weather data
         private WeatherForecastObject _weatherForecast = new WeatherForecastObject();
+
+        // dictionary containing the states of the weather forecast
+        public Dictionary<string, int> weatherForecastStates = new Dictionary<string, int>();
 
         // constructor
         public WeatherInterface()
@@ -222,6 +226,97 @@ namespace ConversationalWeather.WeatherAPI
             {
                 Status = "A problem occured during loading and converting the weather data.\nPlease make sure you are connected to the internet.\nDouble tap to try again.";
             }
+        }
+
+        // aggregate and create the location information text
+        public String GetLocationInformation()
+        {
+            return "Seems like you're in " + WeatherForecast.city.name.ToString() + ".";
+        }
+
+        // aggregate and create the weather forecast text
+        public String GetWeatherForecastText()
+        {
+            // initialise weather summary string
+            String weatherForecastText = "There will be ";
+
+            // iterate through all forecasted weather nodes
+            for (int i = 0; i < WeatherForecast.list.Count; i++)
+            {
+                // check if the weather state is already known
+                if (!weatherForecastStates.ContainsKey(WeatherForecast.list[i].weather[0].description.ToString()))
+                {
+                    // if not known yet, add the weather state to the dictionary
+                    weatherForecastStates.Add(WeatherForecast.list[i].weather[0].description.ToString(), WeatherForecast.list[i].weather[0].id);
+                }
+            }
+
+            // loop through all found weather states
+            // we only need the weather states once
+            // this will determine the icons and states to show on screen
+            int j = 1;
+            foreach (KeyValuePair<string, int> pair in weatherForecastStates)
+            {
+                // increase the counter
+                // note that this runs one in front of the item count
+                j++;
+
+                // store the weather state in the summary string
+                weatherForecastText += pair.Key;
+
+                // check if this is an item in the middle
+                if (j < weatherForecastStates.Count)
+                {
+                    weatherForecastText += ", ";
+                }
+                // or the last item in the dictionary
+                else if (j == weatherForecastStates.Count)
+                {
+                    weatherForecastText += " and then ";
+                }
+            }
+
+            // finish aggregated forecast
+            weatherForecastText += " later.";
+
+            // done
+            return weatherForecastText;
+        }
+
+        // aggregate and create the temperature information text
+        public String GetTemperatureInformation()
+        {
+            // initialise holding vars for min and max temperature
+            double minTemp = 500.0;
+            double maxTemp = 0.0;
+
+            // iterate through all forecasted weather nodes
+            for (int i = 0; i < WeatherForecast.list.Count; i++)
+            {
+                // check for min / max temo
+                // note that we're only interested in the "near" future
+                // hence we're only checking the first 5 entries at most
+                if (i < 5)
+                {
+                    if (WeatherForecast.list[i].main.temp_min < minTemp) minTemp = WeatherForecast.list[i].main.temp_min;
+                    if (WeatherForecast.list[i].main.temp_max > maxTemp) maxTemp = WeatherForecast.list[i].main.temp_max;
+                }
+            }
+
+            // build temperature string
+            // note that we change the temperature unit sign according to the chosen one
+            String temperatureUnitSign = "°F";
+            if (useCelsius) temperatureUnitSign = "°C";
+            String temperatureText = "The temperature will be between " + Convert.ToInt16(minTemp) + temperatureUnitSign + " and " + Convert.ToInt16(maxTemp) + temperatureUnitSign + ".";
+
+            // done
+            return temperatureText;
+        }
+
+        // aggregate and create the temperature hint text
+        public String GetTemperatureHint()
+        {
+            return "Hello.";
         }
     }
 }
