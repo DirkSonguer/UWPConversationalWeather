@@ -23,4 +23,6 @@ Tested with Windows 10 Mobile on a Lumia 950XL and the Win10 mobile emulator 10.
 
 ## Screenshot
 
-![alt text](https://github.com/DirkSonguer/UWPConversationalWeather/blob/master/cw_screenshot.png "ConversationalWeather Screenshot")
+![alt text](https://github.com/DirkSonguer/UWPConversationalWeather/blob/master/conversationalweather_main.png "Conversational Weather main page")
+![alt text](https://github.com/DirkSonguer/UWPConversationalWeather/blob/master/conversationalweather_temperature.png "Conversational Weather temperature page")
+![alt text](https://github.com/DirkSonguer/UWPConversationalWeather/blob/master/conversationalweather_about.png "Conversational Weather about page")
