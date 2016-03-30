@@ -23,13 +23,23 @@ namespace ConversationalWeather
         // dictionary that contains all the weather icons
         Dictionary<int, Image> weatherIconDictionary = new Dictionary<int, Image>();
 
+        // application settings container
+        ApplicationDataContainer applicationSettings = ApplicationData.Current.LocalSettings;
+
         // this will hold the main weather icon that is then used in the active tile
         String mainWeatherIcon = "";
+
+        // flag that all components have been initialised
+        Boolean componentInitialisationDone = false;
 
         public MainPage()
         {
             // initialise component
             this.InitializeComponent();
+
+            // set temperature unit according to local configuration
+            weatherApi.useCelsius = Convert.ToBoolean(applicationSettings.Values["useCelsius"]);
+            toggleTemperatureUnit.IsOn = weatherApi.useCelsius;
 
             // add callback events for weather api
             weatherApi.PropertyChanged += WeatherApiPropertyChanged;
@@ -53,6 +63,9 @@ namespace ConversationalWeather
 
             // load the weather data
             this.LoadWeatherData(null, null);
+
+            // initialisation done
+            componentInitialisationDone = true;
         }
 
         // trigger to reload the weather data
@@ -252,8 +265,14 @@ namespace ConversationalWeather
         // temperature unit has changed
         private void ToggleTemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            // set temperature flag accordingly
-            weatherApi.useCelsius = toggleTemperatureUnit.IsOn;
+            if (componentInitialisationDone)
+            {
+                // set temperature flag accordingly
+                weatherApi.useCelsius = toggleTemperatureUnit.IsOn;
+
+                // store flag in local storage
+                applicationSettings.Values["useCelsius"] = toggleTemperatureUnit.IsOn;
+            }
         }
 
         // current pivot item has changed

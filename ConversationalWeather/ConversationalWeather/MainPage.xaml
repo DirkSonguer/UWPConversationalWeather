@@ -37,8 +37,8 @@
                 </StackPanel>
             </Grid>
         </PivotItem>
-        <PivotItem Background="Tomato">
-            <Grid Background="Tomato" Margin="0,-48,0,0">
+        <PivotItem Background="SlateGray">
+            <Grid Background="SlateGray"  Margin="0,-48,0,0">
                 <StackPanel Margin="00,0,00,0" VerticalAlignment="Top">
                     <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="A little app by Dirk Songuer." HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light" Tapped="labelAboutAuthor_Tapped" />
                     <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="This application will not send or store any personal data." HorizontalAlignment="Left" FontSize="44" FontWeight="Normal" />
@@ -48,7 +48,7 @@
                     <TextBlock Margin="0,20,0,0" Foreground="White" TextWrapping="WrapWholeWords" Text="Conversational Weather uses the free Open Weather Maps API to acquire the weather data for your current location. It also uses the wonderful Meteocons icon set for the weather state icons. Everything else is lovingly hand-crafted and available as open source on GitHub." HorizontalAlignment="Left" FontSize="14" FontWeight="Light" Tapped="labelAboutApplication_Tapped" />
                 </StackPanel>
                 <StackPanel Margin="0,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Image Source="Assets/Wide310x150Logo.scale-200.png" Margin="0,0,0,0" Height="120" HorizontalAlignment="Center" Opacity="0.15" />
+                    <Image Source="Assets/Wide310x150Logo.scale-200.png" Margin="0,0,0,10" Height="120" HorizontalAlignment="Center" Opacity="0.15" />
                 </StackPanel>
             </Grid>
         </PivotItem>

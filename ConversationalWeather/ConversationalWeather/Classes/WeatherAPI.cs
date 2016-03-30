@@ -246,7 +246,11 @@ namespace ConversationalWeather.WeatherAPI
                 if (!weatherForecastStates.ContainsKey(WeatherForecast.list[i].weather[0].description.ToString()))
                 {
                     // if not known yet, add the weather state to the dictionary
-                    weatherForecastStates.Add(WeatherForecast.list[i].weather[0].description.ToString(), WeatherForecast.list[i].weather[0].id);
+                    // however cap the number of states to 5
+                    if (weatherForecastStates.Count < 5)
+                    {
+                        weatherForecastStates.Add(WeatherForecast.list[i].weather[0].description.ToString(), WeatherForecast.list[i].weather[0].id);
+                    }
                 }
             }
 
