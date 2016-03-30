@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
-using Windows.Security.Cryptography.Certificates;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ConversationalWeather.Objects;
 
 namespace ConversationalWeather.WeatherAPI
@@ -27,22 +23,34 @@ namespace ConversationalWeather.WeatherAPI
         private HttpBaseProtocolFilter filter;
         private HttpClient httpClient;
 
-        // flag to indicate if geolocation is locked / known
-        public Boolean geopositionLocked = false;
+        // flag to indicate that geolocation is known
+        public Boolean geopositionKnown = false;
+
+        // flag to indicate that weather data is known
+        public Boolean weatherDataLoaded = false;
+
+        // flag to indicate temperature units
+        public Boolean useCelsius = true;
 
         // contains the found geolocation
         private Geoposition _currentPosition;
 
-        // cotnains the status of the geolocation tracking
+        // contains the status of the geolocation tracking
         private String _status = "";
 
         // object containing the returned weather data
         private WeatherForecastObject _weatherForecast = new WeatherForecastObject();
 
+        // dictionary containing the states of the weather forecast
+        public Dictionary<string, int> weatherForecastStates = new Dictionary<string, int>();
+
         // constructor
         public WeatherInterface()
         {
-            geopositionLocked = false;
+            // set initial values for flags
+            geopositionKnown = false;
+            weatherDataLoaded = false;
+            useCelsius = true;
 
             // create an HttpClient instance with default settings. I.e. no custom filters. 
             filter = new HttpBaseProtocolFilter();
@@ -55,16 +63,37 @@ namespace ConversationalWeather.WeatherAPI
             get { return _currentPosition; }
             set
             {
+                // set status that geolocation was found
+                Status = "Found your position.";
+
                 // we have a geolocation locked now
-                geopositionLocked = true;
+                geopositionKnown = true;
 
                 // store the data
                 _currentPosition = value;
 
-                this.GetWeatherForcastForGeoposition();
-
                 // call the OnPropertyChanged callback to indicate new data
                 this.OnPropertyChanged("CurrentPosition");
+            }
+        }
+
+        // setter / getter for the weather data response
+        public WeatherForecastObject WeatherForecast
+        {
+            get { return _weatherForecast; }
+            set
+            {
+                // set status that weather data was found
+                Status = "Weather data received.";
+
+                // we have weather data now
+                weatherDataLoaded = true;
+
+                // store the data
+                _weatherForecast = value;
+
+                // call the OnPropertyChanged callback to indicate new data
+                this.OnPropertyChanged("WeatherForecast");
             }
         }
 
@@ -82,22 +111,8 @@ namespace ConversationalWeather.WeatherAPI
             }
         }
 
-        // setter / getter for the weather data response
-        public WeatherForecastObject WeatherForecast
-        {
-            get { return _weatherForecast; }
-            set
-            {
-                // store the data
-                _weatherForecast = value;
-
-                // call the OnPropertyChanged callback to indicate new data
-                this.OnPropertyChanged("WeatherForecast");
-            }
-        }
-
         // create the OnPropertyChanged method to raise the event
-        protected void OnPropertyChanged(string name)
+        public void OnPropertyChanged(string name)
         {
             // get the handler for the event
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -114,7 +129,7 @@ namespace ConversationalWeather.WeatherAPI
         {
             try
             {
-                Status = "Trying to get your location";
+                Status = "Trying to get your location.";
 
                 // request permission to access location
                 var accessStatus = await Geolocator.RequestAccessAsync();
@@ -124,7 +139,6 @@ namespace ConversationalWeather.WeatherAPI
                 {
                     // in case the user allowed it, start searching for the location
                     case GeolocationAccessStatus.Allowed:
-
                         // get cancellation token
                         _cts = new CancellationTokenSource();
                         CancellationToken token = _cts.Token;
@@ -132,20 +146,20 @@ namespace ConversationalWeather.WeatherAPI
                         // if DesiredAccuracy or DesiredAccuracyInMeters are not set (or value is 0), DesiredAccuracy.Default is used.
                         Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
 
-                        // try to get the geolocation and set it to the property
+                        // try to get the geolocation
+                        // if successful this will change the CurrentPosition property
                         CurrentPosition = await geolocator.GetGeopositionAsync().AsTask(token);
-                        Status = "Ok, found your position";
                         break;
 
                     // if the user denied the access
                     case GeolocationAccessStatus.Denied:
-                        geopositionLocked = false;
+                        geopositionKnown = false;
                         Status = "Access to location is denied.";
                         break;
 
                     // if something else went wrong
                     case GeolocationAccessStatus.Unspecified:
-                        geopositionLocked = false;
+                        geopositionKnown = false;
                         Status = "Unspecified geolocation tracking error.";
                         break;
                 }
@@ -153,19 +167,19 @@ namespace ConversationalWeather.WeatherAPI
             // user cancelled request
             catch (TaskCanceledException)
             {
-                geopositionLocked = false;
+                geopositionKnown = false;
                 Status = "Geolocation tracking cancelled.";
             }
             // exception was caught
             catch (Exception ex)
             {
-                geopositionLocked = false;
+                geopositionKnown = false;
                 Status = "General error when tracking geolocation: " + ex.ToString();
             }
             // done
             finally
             {
-                geopositionLocked = false;
+                geopositionKnown = false;
                 _cts = null;
             }
         }
@@ -174,29 +188,244 @@ namespace ConversationalWeather.WeatherAPI
         // this will use Windows.Devices.Geolocation to query the current location 
         async public void GetWeatherForcastForGeoposition()
         {
+            // set status to loading
+            Status = "Loading weather data.";
+
             try
             {
+#if DEBUG
+                String weatherApiUrl = "http://localhost:8888/forecast.json";
+#else
                 // create URL for getting forcast
                 String weatherApiUrl = "http://api.openweathermap.org/data/2.5/forecast";
                 weatherApiUrl += "?lat=" + CurrentPosition.Coordinate.Latitude.ToString();
                 weatherApiUrl += "&lon=" + CurrentPosition.Coordinate.Longitude.ToString();
                 weatherApiUrl += "&APPID=60c2636cd48cde2176af74be0d397d00";
 
-                // set status to loading
-                Status = "Loading weather data";
+                // check which temperature unit to use
+                // note that the default for the API is Kelvin
+                if (useCelsius)
+                {
+                    weatherApiUrl += "&units=metric";
+                } else {
+                    weatherApiUrl += "&units=imperial";
+                }
+#endif
 
                 // load weather forcast data
                 Uri myUri = new Uri(weatherApiUrl, UriKind.Absolute);
                 HttpResponseMessage response = await httpClient.GetAsync(myUri).AsTask(_cts.Token);
 
                 // convert json data to object
+                // if successful this will change the WeatherForecast property
                 WeatherForecast = JsonConvert.DeserializeObject<WeatherForecastObject>(response.Content.ToString());
             }
             // exception was caught
             catch (Exception ex)
             {
-                Status = "A problem occured during loading and converting the weather data: " + ex.ToString();
+                Status = "A problem occured during loading and converting the weather data.\nPlease make sure you are connected to the internet.\nDouble tap to try again.";
             }
+        }
+
+        // aggregate and create the location information text
+        public String GetLocationInformation()
+        {
+            return "Seems like you're in " + WeatherForecast.city.name.ToString() + ".";
+        }
+
+        // aggregate and create the weather forecast text
+        public String GetWeatherForecastText()
+        {
+            // initialise weather summary string
+            String weatherForecastText = "There will be ";
+
+            // iterate through all forecasted weather nodes
+            for (int i = 0; i < WeatherForecast.list.Count; i++)
+            {
+                // check if the weather state is already known
+                if (!weatherForecastStates.ContainsKey(WeatherForecast.list[i].weather[0].description.ToString()))
+                {
+                    // if not known yet, add the weather state to the dictionary
+                    // however cap the number of states to 5
+                    if (weatherForecastStates.Count < 5)
+                    {
+                        weatherForecastStates.Add(WeatherForecast.list[i].weather[0].description.ToString(), WeatherForecast.list[i].weather[0].id);
+                    }
+                }
+            }
+
+            // loop through all found weather states
+            // we only need the weather states once
+            // this will determine the icons and states to show on screen
+            int j = 1;
+            foreach (KeyValuePair<string, int> pair in weatherForecastStates)
+            {
+                // increase the counter
+                // note that this runs one in front of the item count
+                j++;
+
+                // store the weather state in the summary string
+                weatherForecastText += pair.Key;
+
+                // check if this is an item in the middle
+                if (j < weatherForecastStates.Count)
+                {
+                    weatherForecastText += ", ";
+                }
+                // or the last item in the dictionary
+                else if (j == weatherForecastStates.Count)
+                {
+                    weatherForecastText += " and then ";
+                }
+            }
+
+            // finish aggregated forecast
+            weatherForecastText += " later.";
+
+            // done
+            return weatherForecastText;
+        }
+
+        // aggregate and create the temperature information text
+        public String GetTemperatureInformation()
+        {
+            // initialise holding vars for min and max temperature
+            double minTemp = 500.0;
+            double maxTemp = 0.0;
+
+            // iterate through all forecasted weather nodes
+            for (int i = 0; i < WeatherForecast.list.Count; i++)
+            {
+                // check for min / max temo
+                // note that we're only interested in the "near" future
+                // hence we're only checking the first 5 entries at most
+                if (i < 5)
+                {
+                    if (WeatherForecast.list[i].main.temp_min < minTemp) minTemp = WeatherForecast.list[i].main.temp_min;
+                    if (WeatherForecast.list[i].main.temp_max > maxTemp) maxTemp = WeatherForecast.list[i].main.temp_max;
+                }
+            }
+
+            // build temperature string
+            // note that we change the temperature unit sign according to the chosen one
+            String temperatureUnitSign = "°F";
+            if (useCelsius) temperatureUnitSign = "°C";
+            String temperatureText = "The temperature will be between " + Convert.ToInt16(minTemp) + temperatureUnitSign + " and " + Convert.ToInt16(maxTemp) + temperatureUnitSign + ".";
+
+            // done
+            return temperatureText;
+        }
+
+        // aggregate and create the temperature hint text
+        public String GetTemperatureHint()
+        {
+            // initialise temperature hint string
+            String temperatureHint = "";
+
+            // note that all the groups are defined weather conditions by OpenWeatherMap
+            // http://openweathermap.org/weather-conditions
+
+            // group 2xx: thunderstorm
+            if ((WeatherForecast.list[0].weather[0].id >= 200) && (WeatherForecast.list[0].weather[0].id <= 299))
+            {
+                temperatureHint += "There is a " + WeatherForecast.list[0].weather[0].description + " going on. Or will be soon. Better get inside!";
+            }
+
+            // group 3xx: drizzle
+            if ((WeatherForecast.list[0].weather[0].id >= 300) && (WeatherForecast.list[0].weather[0].id <= 399))
+            {
+                temperatureHint += "Drip, drop, " + WeatherForecast.list[0].weather[0].description + " outside. Better bring an umbrella.";
+            }
+
+            // group 5xx: rain
+            if ((WeatherForecast.list[0].weather[0].id >= 500) && (WeatherForecast.list[0].weather[0].id <= 600))
+            {
+                temperatureHint += "Meh, " + WeatherForecast.list[0].weather[0].description + " outside or coming up. Better get somewhere dry.";
+            }
+
+            // group 6xx: snow
+            if ((WeatherForecast.list[0].weather[0].id >= 600) && (WeatherForecast.list[0].weather[0].id <= 699))
+            {
+                temperatureHint += "Brr, there is " + WeatherForecast.list[0].weather[0].description + " outside. Keep yourself warm.";
+            }
+
+            // group 7xx: atmosphere
+            if ((WeatherForecast.list[0].weather[0].id >= 700) && (WeatherForecast.list[0].weather[0].id <= 799))
+            {
+                temperatureHint += "Oh! A bit of " + WeatherForecast.list[0].weather[0].description + "! Really?";
+            }
+
+            // group 800: clear
+            if (WeatherForecast.list[0].weather[0].id == 800)
+            {
+                temperatureHint += "All is clear, nothing to see.";
+            }
+
+            // group 80x: clouds
+            if ((WeatherForecast.list[0].weather[0].id >= 801) && (WeatherForecast.list[0].weather[0].id <= 899))
+            {
+                temperatureHint = "It's cloudy. Just some " + WeatherForecast.list[0].weather[0].description + ".";
+            }
+
+            // group 9xx: extreme
+            if ((WeatherForecast.list[0].weather[0].id >= 900) && (WeatherForecast.list[0].weather[0].id <= 999))
+            {
+                temperatureHint = "Oh? Wow!. Be careful out there!";
+            }
+
+            int celsiusTemperature = 0;
+            celsiusTemperature = Convert.ToInt16(WeatherForecast.list[0].main.temp);
+            if (!useCelsius) celsiusTemperature = Convert.ToInt16((WeatherForecast.list[0].main.temp - 32) * 5 / 9);
+
+            temperatureHint += " And it's ";
+
+            // VERY cold
+            if (celsiusTemperature < -10)
+            {
+                temperatureHint += "really COLD!";
+            }
+
+            // very cold
+            if ((celsiusTemperature >= -10) && (celsiusTemperature < 0))
+            {
+                temperatureHint += "pretty cold.";
+            }
+
+            // cold
+            if ((celsiusTemperature >= 0) && (celsiusTemperature < 10))
+            {
+                temperatureHint += "a bit cold";
+            }
+
+            // a bit chilly
+            if ((celsiusTemperature >= 10) && (celsiusTemperature < 20))
+            {
+                temperatureHint += "a bit chilly";
+            }
+
+            // cold
+            if ((celsiusTemperature >= 20) && (celsiusTemperature < 30))
+            {
+                temperatureHint += "quite nice";
+            }
+
+            // really hot
+            if ((celsiusTemperature >= 30) && (celsiusTemperature < 40))
+            {
+                temperatureHint += "pretty hot";
+            }
+
+            // REALLY hot
+            if (celsiusTemperature >= 40)
+            {
+                temperatureHint += "really HOT";
+            }
+
+            // finish temperature hint
+            temperatureHint += " outside.";
+
+            // done
+            return temperatureHint;
         }
     }
 }

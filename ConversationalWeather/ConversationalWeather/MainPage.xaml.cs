@@ -3,39 +3,53 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
+using Windows.UI.Notifications;
 using ConversationalWeather.WeatherAPI;
 using Windows.Storage;
-
-// Die Vorlage "Leere Seite" ist unter http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 dokumentiert.
 
 namespace ConversationalWeather
 {
     /// <summary>
-    /// Eine leere Seite, die eigenständig verwendet oder zu der innerhalb eines Rahmens navigiert werden kann.
+    /// This is the main page showing the main weather text
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        // weather api class singleton
         WeatherInterface weatherApi = new WeatherInterface();
 
+        // dictionary that contains all the weather icons
         Dictionary<int, Image> weatherIconDictionary = new Dictionary<int, Image>();
+
+        // application settings container
+        ApplicationDataContainer applicationSettings = ApplicationData.Current.LocalSettings;
+
+        // this will hold the main weather icon that is then used in the active tile
+        String mainWeatherIcon = "";
+
+        // flag that all components have been initialised
+        Boolean componentInitialisationDone = false;
 
         public MainPage()
         {
             // initialise component
             this.InitializeComponent();
 
+            // set temperature unit according to local configuration
+            weatherApi.useCelsius = Convert.ToBoolean(applicationSettings.Values["useCelsius"]);
+            toggleTemperatureUnit.IsOn = weatherApi.useCelsius;
+
             // add callback events for weather api
-            weatherApi.PropertyChanged += weatherApiPropertyChanged;
+            weatherApi.PropertyChanged += WeatherApiPropertyChanged;
 
             // create dictionary for images
             // this is basically a fake list
-            weatherIconDictionary.Add(1, imageWeatherIcon1);
-            weatherIconDictionary.Add(2, imageWeatherIcon2);
-            weatherIconDictionary.Add(3, imageWeatherIcon3);
-            weatherIconDictionary.Add(4, imageWeatherIcon4);
+            weatherIconDictionary.Add(0, imageWeatherIcon1);
+            weatherIconDictionary.Add(1, imageWeatherIcon2);
+            weatherIconDictionary.Add(2, imageWeatherIcon3);
+            weatherIconDictionary.Add(3, imageWeatherIcon4);
 
             // set icon size to quarter of the screen width
             Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
@@ -44,13 +58,32 @@ namespace ConversationalWeather
             imageWeatherIcon3.Width = (bounds.Width / 4.5);
             imageWeatherIcon4.Width = (bounds.Width / 4.5);
 
-            // get current geolocation
+            // add double tap event to switch page
+            pageGrid.DoubleTapped += new DoubleTappedEventHandler(this.LoadWeatherData);
+
+            // load the weather data
+            this.LoadWeatherData(null, null);
+
+            // initialisation done
+            componentInitialisationDone = true;
+        }
+
+        // trigger to reload the weather data
+        // this will also take care of resetting the UI
+        public void LoadWeatherData(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            // hide UI and show loader
+            rootPivot.Items.Remove(pivotTemperatureItem);
+            panelContent.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            // first get current geolocation
             // note that his will trigger a weather forecast for this location
             weatherApi.GetCurrentLocation();
         }
 
         // weather data has changed
-        public void weatherApiPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void WeatherApiPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // position was found
             if (e.PropertyName == "CurrentPosition")
@@ -67,63 +100,47 @@ namespace ConversationalWeather
 
         public void GeopositionFound()
         {
-            textLocationInformation.Text = "Loading weather information";
+            // load weather data from server
+            weatherApi.GetWeatherForcastForGeoposition();
         }
 
         // weather data was received
         // it's now available in weatherApi.WeatherForecast
         public void WeatherForecastLoaded()
         {
-            // show location string
-            textLocationInformation.Text = "Seems like you're in " + weatherApi.WeatherForecast.city.name.ToString();
-            String weatherSummary = "There will be ";
-
-            // get dictionary to fill all forecasted weather states
-            Dictionary<string, int> weatherDictionary = new Dictionary<string, int>();
-            // iterate through all forecasted weather nodes
-            for (int i = 0; i < weatherApi.WeatherForecast.list.Count; i++)
-            {
-                // check if the weather state is already known
-                if (!weatherDictionary.ContainsKey(weatherApi.WeatherForecast.list[i].weather[0].description.ToString()))
-                {
-                    // if not known yet, add the weather state to the dictionary
-                    weatherDictionary.Add(weatherApi.WeatherForecast.list[i].weather[0].description.ToString(), weatherApi.WeatherForecast.list[i].weather[0].id);
-                }
-            }
-
-            // create a local counter
-            int j = 1;
-
-            // loop through all found weather states
-            foreach (KeyValuePair<string, int> pair in weatherDictionary)
-            {
-                // increase the counter
-                // note that this runs one in front of the item count
-                j++;
-
-                // store the weather state in the summary string
-                weatherSummary += pair.Key;
-
-                // check if this is an item in the middle
-                if (j < weatherDictionary.Count)
-                {
-                    weatherSummary += ", ";
-                }
-                // or the last item in the dictionary
-                else if (j == weatherDictionary.Count)
-                {
-                    weatherSummary += " and then ";
-                }
-
-                // the first 4 items should display a matching icon
-                if (j <= 5)
-                {
-                    this.selectWeatherIcon(pair.Value.ToString(), (j - 1), false);
-                }
-            }
+            // display location string
+            textLocationInformation.Text = weatherApi.GetLocationInformation();
 
             // display the aggregated weather summary
-            textWeatherInformation.Text = weatherSummary + " later.";
+            textWeatherForecast.Text = weatherApi.GetWeatherForecastText();
+
+            // display temperature information
+            textTemperatureInformation.Text = weatherApi.GetTemperatureInformation();
+
+            // display temperature hint
+            textTemperatureHint.Text = weatherApi.GetTemperatureHint();
+
+            // loop through all found weather states and select matching icon
+            int i = 0;
+            foreach (KeyValuePair<string, int> pair in weatherApi.weatherForecastStates)
+            {
+                // the first 4 items should display a matching icon
+                if (i < 4)
+                {
+                    this.selectWeatherIcon(pair.Value.ToString(), (i), false);
+                }
+
+                // increase the counter
+                i++;
+            }
+
+            // update active tile with new data
+            this.UpdateActiveTile();
+
+            // hide the loader and show UI elements for data
+            panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            rootPivot.Items.Insert(1, pivotTemperatureItem);
         }
 
         // this will load a weather icon
@@ -144,6 +161,17 @@ namespace ConversationalWeather
                 // https://msdn.microsoft.com/en-us/windows/uwp/porting/wpsl-to-uwp-namespace-and-class-mappings
                 BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, "/Assets/WeatherIcons/" + weatherCode + ".png"));
                 weatherIconDictionary[weatherIconIndex].Source = bitmapImage;
+
+                // set main weather icon
+                if (weatherIconIndex == 0)
+                {
+                    // set variable
+                    mainWeatherIcon = "/Assets/WeatherIcons/" + weatherCode + ".png";
+
+                    // also update image temperature icon
+                    bitmapImage = new BitmapImage(new Uri(this.BaseUri, mainWeatherIcon));
+                    imageTemperatureIcon1.Source = bitmapImage;
+                }
             }
             catch (FileNotFoundException ex)
             {
@@ -184,20 +212,91 @@ namespace ConversationalWeather
                     int rawWeatherCode = Convert.ToInt16(result[0]);
                     int baseWeatherCode = Convert.ToInt16(rawWeatherCode / 100) * 100;
 
-                    // done, try loading it again
-                    // also note the recursion flag
+                    // check if the code has changed
+                    // this will make sure that we really found a new base code and will not try to load the same file again
                     if (baseWeatherCode != rawWeatherCode)
                     {
+                        // try loading the new base code
+                        // also note the recursion flag
                         this.selectWeatherIcon(baseWeatherCode.ToString(), weatherIconIndex, false);
                     }
                 }
             }
         }
 
+        // update the live tile with updated data
+        async public void UpdateActiveTile()
+        {
+            // get data from xml tile template
+            StorageFile xmlDocument = await StorageFile.GetFileFromApplicationUriAsync(new Uri(this.BaseUri, "/Assets/ActiveTile/ActiveTileTemplate.xml"));
+            String xmlDocumentContent = FileIO.ReadTextAsync(xmlDocument).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // set the current main weather state icon
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileWeatherStateIcon}}", mainWeatherIcon);
+
+            // build temperature string
+            // note that we change the temperature unit sign according to the chosen one
+            String temperatureUnitSign = "°F";
+            if (weatherApi.useCelsius) temperatureUnitSign = "°C";
+            String temperatureText = Convert.ToInt16(weatherApi.WeatherForecast.list[0].main.temp) + temperatureUnitSign;
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileCurrentTemperature}}", temperatureText);
+
+            // set the current weather forecast text
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherApi.GetTemperatureHint());
+
+            // convert xml template (string) into a proper xml object
+            var xmlTileData = new Windows.Data.Xml.Dom.XmlDocument();
+            xmlTileData.LoadXml(xmlDocumentContent);
+
+            // publish tile data to tile updater
+            TileNotification tileNotification = new TileNotification(xmlTileData);
+            TileUpdater tileUpdateManager = TileUpdateManager.CreateTileUpdaterForApplication();
+            tileUpdateManager.Update(tileNotification);
+        }
+
         // show status message
+        // this will happen mostly during loading so we just update the loading status
         public void StatusChanged()
         {
-            textLocationInformation.Text = weatherApi.Status;
+            // set loading status text
+            textLoadingStatus.Text = weatherApi.Status;
+        }
+
+        // temperature unit has changed
+        private void ToggleTemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (componentInitialisationDone)
+            {
+                // set temperature flag accordingly
+                weatherApi.useCelsius = toggleTemperatureUnit.IsOn;
+
+                // store flag in local storage
+                applicationSettings.Values["useCelsius"] = toggleTemperatureUnit.IsOn;
+            }
+        }
+
+        // current pivot item has changed
+        private void RootPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // set the background color brush of the root pivot to the background color of the current pivot item
+            // this basically leads to a smooth transition from one color to the next when switching pivot items
+            rootPivot.Background = (rootPivot.Items[rootPivot.SelectedIndex] as PivotItem).Background;
+        }
+
+        // author information label was tapped
+        async private void labelAboutAuthor_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            // set url and launch app registered with handling URIs
+            Uri uriAuthor = new Uri(@"http://dirk.songuer.de");
+            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+        }
+
+        // application information label was tapped
+        async private void labelAboutApplication_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            // set url and launch app registered with handling URIs
+            Uri uriAuthor = new Uri(@"https://github.com/DirkSonguer/UWPConversationalWeather");
+            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
         }
     }
 }

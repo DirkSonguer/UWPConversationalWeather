@@ -1,0 +1,8 @@
+{
+  "name": "openweathermap-mock",
+  "version": "1.0.0",
+  "description": "Simple mock server for the Open Weather Map service. Use if offline or during testing.",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
