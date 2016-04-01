@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
-using ConversationalWeather.WeatherAPI;
+using ConversationalWeather.Classes;
 using Windows.Storage;
 
 namespace ConversationalWeather
@@ -17,8 +17,11 @@ namespace ConversationalWeather
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        // weather api class singleton
+        // weather api class
         WeatherInterface weatherApi = new WeatherInterface();
+
+        // weather api content transformation
+        WeatherTransformator weatherTransformator = new WeatherTransformator();
 
         // dictionary that contains all the weather icons
         Dictionary<int, Image> weatherIconDictionary = new Dictionary<int, Image>();
@@ -27,10 +30,10 @@ namespace ConversationalWeather
         ApplicationDataContainer applicationSettings = ApplicationData.Current.LocalSettings;
 
         // this will hold the main weather icon that is then used in the active tile
-        String mainWeatherIcon = "";
+        string mainWeatherIcon = "";
 
         // flag that all components have been initialised
-        Boolean componentInitialisationDone = false;
+        bool componentInitialisationDone = false;
 
         public MainPage()
         {
@@ -109,20 +112,20 @@ namespace ConversationalWeather
         public void WeatherForecastLoaded()
         {
             // display location string
-            textLocationInformation.Text = weatherApi.GetLocationInformation();
+            textLocationInformation.Text = weatherTransformator.GetLocationInformation(weatherApi.WeatherForecast);
 
             // display the aggregated weather summary
-            textWeatherForecast.Text = weatherApi.GetWeatherForecastText();
+            textWeatherForecast.Text = weatherTransformator.GetWeatherForecastText(weatherApi.WeatherForecast);
 
             // display temperature information
-            textTemperatureInformation.Text = weatherApi.GetTemperatureInformation();
+            textTemperatureInformation.Text = weatherTransformator.GetTemperatureInformation(weatherApi.WeatherForecast, weatherApi.useCelsius);
 
             // display temperature hint
-            textTemperatureHint.Text = weatherApi.GetTemperatureHint();
+            textTemperatureHint.Text = weatherTransformator.GetTemperatureHint(weatherApi.WeatherForecast, weatherApi.useCelsius);
 
             // loop through all found weather states and select matching icon
             int i = 0;
-            foreach (KeyValuePair<string, int> pair in weatherApi.weatherForecastStates)
+            foreach (KeyValuePair<string, int> pair in weatherTransformator.weatherForecastStates)
             {
                 // the first 4 items should display a matching icon
                 if (i < 4)
@@ -229,20 +232,20 @@ namespace ConversationalWeather
         {
             // get data from xml tile template
             StorageFile xmlDocument = await StorageFile.GetFileFromApplicationUriAsync(new Uri(this.BaseUri, "/Assets/ActiveTile/ActiveTileTemplate.xml"));
-            String xmlDocumentContent = FileIO.ReadTextAsync(xmlDocument).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
+            string xmlDocumentContent = FileIO.ReadTextAsync(xmlDocument).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
 
             // set the current main weather state icon
             xmlDocumentContent = xmlDocumentContent.Replace("{{TileWeatherStateIcon}}", mainWeatherIcon);
 
             // build temperature string
             // note that we change the temperature unit sign according to the chosen one
-            String temperatureUnitSign = "°F";
+            string temperatureUnitSign = "°F";
             if (weatherApi.useCelsius) temperatureUnitSign = "°C";
-            String temperatureText = Convert.ToInt16(weatherApi.WeatherForecast.list[0].main.temp) + temperatureUnitSign;
+            string temperatureText = Convert.ToInt16(weatherApi.WeatherForecast.list[0].main.temp) + temperatureUnitSign;
             xmlDocumentContent = xmlDocumentContent.Replace("{{TileCurrentTemperature}}", temperatureText);
 
             // set the current weather forecast text
-            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherApi.GetTemperatureHint());
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherTransformator.GetTemperatureHint(weatherApi.WeatherForecast, weatherApi.useCelsius));
 
             // convert xml template (string) into a proper xml object
             var xmlTileData = new Windows.Data.Xml.Dom.XmlDocument();
@@ -288,7 +291,7 @@ namespace ConversationalWeather
         {
             // set url and launch app registered with handling URIs
             Uri uriAuthor = new Uri(@"http://dirk.songuer.de");
-            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+            bool launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
         }
 
         // application information label was tapped
@@ -296,7 +299,7 @@ namespace ConversationalWeather
         {
             // set url and launch app registered with handling URIs
             Uri uriAuthor = new Uri(@"https://github.com/DirkSonguer/UWPConversationalWeather");
-            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+            bool launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
         }
     }
 }
