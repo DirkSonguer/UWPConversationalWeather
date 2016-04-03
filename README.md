@@ -16,7 +16,7 @@ Link: https://github.com/DirkSonguer/UWPConversationalWeather
 
 - Microsoft Visual Studio 2015: https://www.visualstudio.com/
 - Open Weather Map API: http://openweathermap.org/
-- Meteocons by Alessio Atzeni: http://www.alessioatzeni.com/meteocons/
+- Dripicons by Amit Jakhu: https://www.behance.net/gallery/19020523/Dripicons-Weather-Set-(Free-Iconset)
 - JSON.Net by Newtonsoft: http://www.newtonsoft.com/json
 
 Tested with Windows 10 Mobile on a Lumia 950XL and the Win10 mobile emulator 10.0.10586.

@@ -93,6 +93,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\WeatherConditions\TemperatureConditions.json" />
     <None Include="ConversationalWeather_StoreKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
@@ -101,11 +102,14 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\WeatherAPI.cs" />
+    <Compile Include="Classes\WeatherTransformator.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\WeatherObject.cs" />
+    <Compile Include="Structures\TemperatureConditionList.cs" />
+    <Compile Include="Structures\WeatherConditionList.cs" />
+    <Compile Include="Structures\WeatherForecastObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -115,34 +119,56 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\ActiveTile\ActiveTileTemplate.xml" />
+    <Content Include="Assets\WeatherConditions\WeatherConditions.json" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\WeatherIcons\200.png" />
+    <Content Include="Assets\WeatherIcons\200_hero.png" />
     <Content Include="Assets\WeatherIcons\201.png" />
-    <Content Include="Assets\WeatherIcons\202.png" />
-    <Content Include="Assets\WeatherIcons\212.png" />
-    <Content Include="Assets\WeatherIcons\232.png" />
-    <Content Include="Assets\WeatherIcons\300.png" />
-    <Content Include="Assets\WeatherIcons\312.png" />
-    <Content Include="Assets\WeatherIcons\500.png" />
-    <Content Include="Assets\WeatherIcons\501.png" />
-    <Content Include="Assets\WeatherIcons\502.png" />
+    <Content Include="Assets\WeatherIcons\211.png" />
+    <Content Include="Assets\WeatherIcons\230_day.png" />
+    <Content Include="Assets\WeatherIcons\230_night.png" />
+    <Content Include="Assets\WeatherIcons\231_day.png" />
+    <Content Include="Assets\WeatherIcons\231_night.png" />
+    <Content Include="Assets\WeatherIcons\300_day.png" />
+    <Content Include="Assets\WeatherIcons\300_hero.png" />
+    <Content Include="Assets\WeatherIcons\300_night.png" />
+    <Content Include="Assets\WeatherIcons\302_day.png" />
+    <Content Include="Assets\WeatherIcons\302_night.png" />
+    <Content Include="Assets\WeatherIcons\310_day.png" />
+    <Content Include="Assets\WeatherIcons\310_night.png" />
+    <Content Include="Assets\WeatherIcons\312_day.png" />
+    <Content Include="Assets\WeatherIcons\312_night.png" />
     <Content Include="Assets\WeatherIcons\503.png" />
     <Content Include="Assets\WeatherIcons\511.png" />
-    <Content Include="Assets\WeatherIcons\600.png" />
-    <Content Include="Assets\WeatherIcons\601.png" />
+    <Content Include="Assets\WeatherIcons\522_day.png" />
+    <Content Include="Assets\WeatherIcons\522_night.png" />
+    <Content Include="Assets\WeatherIcons\600_day.png" />
+    <Content Include="Assets\WeatherIcons\600_hero.png" />
+    <Content Include="Assets\WeatherIcons\600_night.png" />
     <Content Include="Assets\WeatherIcons\602.png" />
-    <Content Include="Assets\WeatherIcons\621.png" />
-    <Content Include="Assets\WeatherIcons\622.png" />
+    <Content Include="Assets\WeatherIcons\615_day.png" />
+    <Content Include="Assets\WeatherIcons\615_night.png" />
     <Content Include="Assets\WeatherIcons\700_day.png" />
+    <Content Include="Assets\WeatherIcons\700_hero.png" />
     <Content Include="Assets\WeatherIcons\700_night.png" />
+    <Content Include="Assets\WeatherIcons\731_day.png" />
+    <Content Include="Assets\WeatherIcons\731_night.png" />
+    <Content Include="Assets\WeatherIcons\741_day.png" />
+    <Content Include="Assets\WeatherIcons\741_night.png" />
+    <Content Include="Assets\WeatherIcons\770_hero.png" />
+    <Content Include="Assets\WeatherIcons\771.png" />
+    <Content Include="Assets\WeatherIcons\781.png" />
     <Content Include="Assets\WeatherIcons\800_day.png" />
+    <Content Include="Assets\WeatherIcons\800_hero.png" />
     <Content Include="Assets\WeatherIcons\800_night.png" />
     <Content Include="Assets\WeatherIcons\801_day.png" />
     <Content Include="Assets\WeatherIcons\801_night.png" />
     <Content Include="Assets\WeatherIcons\802_day.png" />
     <Content Include="Assets\WeatherIcons\802_night.png" />
     <Content Include="Assets\WeatherIcons\804.png" />
-    <Content Include="Assets\WeatherIcons\900.png" />
-    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Assets\WeatherIcons\903.png" />
+    <Content Include="Assets\WeatherIcons\904.png" />
+    <Content Include="Assets\WeatherIcons\905.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -162,6 +188,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

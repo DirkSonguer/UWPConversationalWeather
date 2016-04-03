@@ -7,8 +7,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
-using ConversationalWeather.WeatherAPI;
 using Windows.Storage;
+using ConversationalWeather.Objects;
+using ConversationalWeather.Classes;
 
 namespace ConversationalWeather
 {
@@ -17,8 +18,11 @@ namespace ConversationalWeather
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        // weather api class singleton
+        // weather api class
         WeatherInterface weatherApi = new WeatherInterface();
+
+        // weather api content transformation
+        WeatherTransformator weatherTransformator = new WeatherTransformator();
 
         // dictionary that contains all the weather icons
         Dictionary<int, Image> weatherIconDictionary = new Dictionary<int, Image>();
@@ -27,10 +31,10 @@ namespace ConversationalWeather
         ApplicationDataContainer applicationSettings = ApplicationData.Current.LocalSettings;
 
         // this will hold the main weather icon that is then used in the active tile
-        String mainWeatherIcon = "";
+        string mainWeatherIcon = "";
 
         // flag that all components have been initialised
-        Boolean componentInitialisationDone = false;
+        bool componentInitialisationDone = false;
 
         public MainPage()
         {
@@ -53,10 +57,10 @@ namespace ConversationalWeather
 
             // set icon size to quarter of the screen width
             Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
-            imageWeatherIcon1.Width = (bounds.Width / 4.5);
-            imageWeatherIcon2.Width = (bounds.Width / 4.5);
-            imageWeatherIcon3.Width = (bounds.Width / 4.5);
-            imageWeatherIcon4.Width = (bounds.Width / 4.5);
+            imageWeatherIcon1.Width = ((bounds.Width - 30) / 4.5);
+            imageWeatherIcon2.Width = ((bounds.Width - 30) / 4.5);
+            imageWeatherIcon3.Width = ((bounds.Width - 30) / 4.5);
+            imageWeatherIcon4.Width = ((bounds.Width - 30) / 4.5);
 
             // add double tap event to switch page
             pageGrid.DoubleTapped += new DoubleTappedEventHandler(this.LoadWeatherData);
@@ -109,30 +113,36 @@ namespace ConversationalWeather
         public void WeatherForecastLoaded()
         {
             // display location string
-            textLocationInformation.Text = weatherApi.GetLocationInformation();
+            textLocationInformation.Text = weatherTransformator.GetLocationInformation(weatherApi.WeatherForecast);
 
             // display the aggregated weather summary
-            textWeatherForecast.Text = weatherApi.GetWeatherForecastText();
+            textWeatherForecast.Text = weatherTransformator.GetWeatherForecastText(weatherApi.WeatherForecast);
 
             // display temperature information
-            textTemperatureInformation.Text = weatherApi.GetTemperatureInformation();
+            textTemperatureInformation.Text = weatherTransformator.GetTemperatureInformation(weatherApi.WeatherForecast, weatherApi.useCelsius);
 
             // display temperature hint
-            textTemperatureHint.Text = weatherApi.GetTemperatureHint();
+            textWeatherCondition.Text = weatherTransformator.GetConditionHint(weatherApi.WeatherForecast, weatherApi.useCelsius);
 
             // loop through all found weather states and select matching icon
             int i = 0;
-            foreach (KeyValuePair<string, int> pair in weatherApi.weatherForecastStates)
+            foreach (KeyValuePair<string, int> pair in weatherTransformator.weatherForecastStates)
             {
                 // the first 4 items should display a matching icon
                 if (i < 4)
                 {
-                    this.selectWeatherIcon(pair.Value.ToString(), (i), false);
+                    // get icon name and load icon into component
+                    string iconName = weatherTransformator.GetConditionIcon(pair.Value);
+                    this.loadImageIntoComponent(iconName, weatherIconDictionary[i]);
                 }
 
                 // increase the counter
                 i++;
             }
+
+            // get and load hero icon
+            string heroIconName = weatherTransformator.GetHeroConditionIcon(weatherApi.WeatherForecast.list[0].weather[0].id);
+            this.loadImageIntoComponent(heroIconName, imageWeatherCondition);
 
             // update active tile with new data
             this.UpdateActiveTile();
@@ -147,80 +157,23 @@ namespace ConversationalWeather
         // the weather code will contain the code from openweathermap
         // the icon index is the reference to the weather icon dictionary
         // recursion is a flag to avoid infinite loops by indicating if the icon has been called recusively or not
-        async public void selectWeatherIcon(String weatherCode, int weatherIconIndex, Boolean recursion)
+        async public void loadImageIntoComponent(string imageUri, Image imageComponent)
         {
             try
             {
                 // try to load the file
                 // note that if the file does not exist, an exception will be thrown
-                StorageFile item = await StorageFile.GetFileFromApplicationUriAsync(new Uri(this.BaseUri, "/Assets/WeatherIcons/" + weatherCode + ".png"));
+                StorageFile item = await StorageFile.GetFileFromApplicationUriAsync(new Uri(this.BaseUri, imageUri));
 
                 // here we can assume that the file does exist
                 // we create a bitmap with the icon and load it into the respective image icon slot
                 // btw. the following link helped me as some namespaces are different for UWP than standard windows / WFP
                 // https://msdn.microsoft.com/en-us/windows/uwp/porting/wpsl-to-uwp-namespace-and-class-mappings
-                BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, "/Assets/WeatherIcons/" + weatherCode + ".png"));
-                weatherIconDictionary[weatherIconIndex].Source = bitmapImage;
-
-                // set main weather icon
-                if (weatherIconIndex == 0)
-                {
-                    // set variable
-                    mainWeatherIcon = "/Assets/WeatherIcons/" + weatherCode + ".png";
-
-                    // also update image temperature icon
-                    bitmapImage = new BitmapImage(new Uri(this.BaseUri, mainWeatherIcon));
-                    imageTemperatureIcon1.Source = bitmapImage;
-                }
+                BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, imageUri));
+                imageComponent.Source = bitmapImage;
             }
             catch (FileNotFoundException ex)
             {
-                // this means the image file for the weather state could not be found
-                // first check if this happened before
-                if (!recursion)
-                {
-                    // if not, it might be that the weather state has different icons for day / night
-                    // for this, we can check the current time
-                    DateTime currentTime = DateTime.Now;
-
-                    // based on the time, we can choose the day / night version
-                    if ((currentTime.Hour > 8) && (currentTime.Hour < 20))
-                    {
-                        // load day version
-                        // note the recursion flag
-                        this.selectWeatherIcon(weatherCode + "_day", weatherIconIndex, true);
-                    }
-                    else
-                    {
-                        // load night version
-                        // note the recursion flag
-                        this.selectWeatherIcon(weatherCode + "_night", weatherIconIndex, true);
-                    }
-                }
-                else
-                {
-                    // this means that no icon exists or the weather state
-                    // and we also checked for day / night versions
-                    // in this case, we can fall back to the base states
-                    // example: 812 -> 800
-                    // we start by removing any day / night identifiers
-                    string[] stringSeparators = new string[] { "_" };
-                    string[] result;
-                    result = weatherCode.Split(stringSeparators, StringSplitOptions.None);
-
-                    // convert to base state
-                    int rawWeatherCode = Convert.ToInt16(result[0]);
-                    int baseWeatherCode = Convert.ToInt16(rawWeatherCode / 100) * 100;
-
-                    // check if the code has changed
-                    // this will make sure that we really found a new base code and will not try to load the same file again
-                    if (baseWeatherCode != rawWeatherCode)
-                    {
-                        // try loading the new base code
-                        // also note the recursion flag
-                        this.selectWeatherIcon(baseWeatherCode.ToString(), weatherIconIndex, false);
-                    }
-                }
             }
         }
 
@@ -229,20 +182,20 @@ namespace ConversationalWeather
         {
             // get data from xml tile template
             StorageFile xmlDocument = await StorageFile.GetFileFromApplicationUriAsync(new Uri(this.BaseUri, "/Assets/ActiveTile/ActiveTileTemplate.xml"));
-            String xmlDocumentContent = FileIO.ReadTextAsync(xmlDocument).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
+            string xmlDocumentContent = FileIO.ReadTextAsync(xmlDocument).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
 
             // set the current main weather state icon
             xmlDocumentContent = xmlDocumentContent.Replace("{{TileWeatherStateIcon}}", mainWeatherIcon);
 
             // build temperature string
             // note that we change the temperature unit sign according to the chosen one
-            String temperatureUnitSign = "°F";
+            string temperatureUnitSign = "°F";
             if (weatherApi.useCelsius) temperatureUnitSign = "°C";
-            String temperatureText = Convert.ToInt16(weatherApi.WeatherForecast.list[0].main.temp) + temperatureUnitSign;
+            string temperatureText = Convert.ToInt16(weatherApi.WeatherForecast.list[0].main.temp) + temperatureUnitSign;
             xmlDocumentContent = xmlDocumentContent.Replace("{{TileCurrentTemperature}}", temperatureText);
 
             // set the current weather forecast text
-            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherApi.GetTemperatureHint());
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileForecast}}", weatherTransformator.GetConditionHint(weatherApi.WeatherForecast, weatherApi.useCelsius));
 
             // convert xml template (string) into a proper xml object
             var xmlTileData = new Windows.Data.Xml.Dom.XmlDocument();
@@ -288,7 +241,7 @@ namespace ConversationalWeather
         {
             // set url and launch app registered with handling URIs
             Uri uriAuthor = new Uri(@"http://dirk.songuer.de");
-            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+            bool launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
         }
 
         // application information label was tapped
@@ -296,7 +249,7 @@ namespace ConversationalWeather
         {
             // set url and launch app registered with handling URIs
             Uri uriAuthor = new Uri(@"https://github.com/DirkSonguer/UWPConversationalWeather");
-            Boolean launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
+            bool launcherState = await Windows.System.Launcher.LaunchUriAsync(uriAuthor);
         }
     }
 }

@@ -1,0 +1,588 @@
+﻿{
+  "WeatherConditions": [
+    {
+      "code": 200,
+      "hint": "A teeny-weeny thunderstorm is visiting town. Better get inside.",
+      "meaning": "thunderstorm with light rain",
+      "icon": "200",
+      "hasDayVariant": false,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 201,
+      "hint": "A thunderstorm is brewing. And it's raining. Better get inside.",
+      "meaning": "thunderstorm with rain",
+      "icon": "201",
+      "hasDayVariant": false,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 202,
+      "hint": "Boom, bang! Splish splosh! Thunderstorm and heavy rain. Better get inside.",
+      "meaning": "thunderstorm with heavy rain",
+      "icon": "201",
+      "hasDayVariant": false,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 210,
+      "hint": "A teeny-weeny thunderstorm is visiting town. Better get inside.",
+      "meaning": "light thunderstorm",
+      "icon": "200",
+      "hasDayVariant": false,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 211,
+      "hint": "A thunderstorm is brewing. And it's raining. Better get inside.",
+      "meaning": "thunderstorm",
+      "icon": "200",
+      "hasDayVariant": false,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 212,
+      "hint": "Boom, bang! Splish splosh! Heavy thunderstorm incoming. Better get inside.",
+      "meaning": "heavy thunderstorm",
+      "icon": "201",
+      "hasDayVariant": false,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 221,
+      "hint": "A thunderstorm is brewing. Or something like that. Better get inside.",
+      "meaning": "ragged thunderstorm",
+      "icon": "230",
+      "hasDayVariant": true,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 230,
+      "hint": "A teeny-weeny thunderstorm is visiting town. Better get inside.",
+      "meaning": "thunderstorm with light drizzle",
+      "icon": "230",
+      "hasDayVariant": true,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 231,
+      "hint": "A thunderstorm is brewing. And it's raining. Better get inside.",
+      "meaning": "thunderstorm with drizzle",
+      "icon": "231",
+      "hasDayVariant": true,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 232,
+      "hint": "Boom, bang! Splish splosh! Heavy thunderstorm incoming. Better get inside.",
+      "meaning": "thunderstorm with heavy drizzle",
+      "icon": "231",
+      "hasDayVariant": true,
+      "heroIcon":  "200_hero"
+    },
+    {
+      "code": 300,
+      "hint": "Drip, drop, some light drizzle outside. Better bring an umbrella.",
+      "meaning": "light intensity drizzle",
+      "icon": "300",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 301,
+      "hint": "Drip, drop, some drizzle outside. Better bring an umbrella.",
+      "meaning": "drizzle",
+      "icon": "300",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 302,
+      "hint": "Splish, splosh, heavy drizzle outside. Better bring an umbrella.",
+      "meaning": "heavy intensity drizzle",
+      "icon": "302",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 310,
+      "hint": "Drip, drop, some drizzle outside. Better bring an umbrella.",
+      "meaning": "light intensity drizzle rain",
+      "icon": "310",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 311,
+      "hint": "Drip, drop, there's drizzle outside. Better bring an umbrella.",
+      "meaning": "drizzle rain",
+      "icon": "310",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 312,
+      "hint": "Splish, splosh, heavy drizzle outside. Better bring an umbrella.",
+      "meaning": "heavy intensity drizzle rain",
+      "icon": "310",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 313,
+      "hint": "Shower, drizzle, everything's wet. Bring an umbrella.",
+      "meaning": "shower rain and drizzle",
+      "icon": "312",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 314,
+      "hint": "Shower, drizzle, everything's wet. Bring an umbrella.",
+      "meaning": "heavy shower rain and drizzle",
+      "icon": "312",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 321,
+      "hint": "Shower, drizzle, everything's wet. Bring an umbrella.",
+      "meaning": "shower drizzle",
+      "icon": "312",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 500,
+      "hint": "Drip, drop, rain ahead. Bring an umbrella or get wet.",
+      "meaning": "light rain",
+      "icon": "300",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 501,
+      "hint": "Drip, drop, rain ahead. Bring an umbrella or get wet.",
+      "meaning": "moderate rain",
+      "icon": "302",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 502,
+      "hint": "Splish, splosh, heavy rain outside. Better bring an umbrella.",
+      "meaning": "heavy intensity rain",
+      "icon": "302",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 503,
+      "hint": "It's raining dogs and cats. Get an umbrella and catch them.",
+      "meaning": "very heavy rain",
+      "icon": "503",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 504,
+      "hint": "It's raining dogs and cats. Get an umbrella and catch them.",
+      "meaning": "extreme rain",
+      "icon": "503",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 511,
+      "hint": "Brrr, freezing rain. Be careful if you have to be somewhere.",
+      "meaning": "freezing rain",
+      "icon": "312",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 520,
+      "hint": "Drip, drop, rain ahead. Bring an umbrella or get wet.",
+      "meaning": "light intensity shower rain",
+      "icon": "500",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 521,
+      "hint": "Drip, drop, rain ahead. Bring an umbrella or get wet.",
+      "meaning": "shower rain",
+      "icon": "502",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 522,
+      "hint": "Splish, splosh, heavy rain outside. Better bring an umbrella.",
+      "meaning": "heavy intensity shower rain",
+      "icon": "522",
+      "hasDayVariant": true,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 531,
+      "hint": "Drip, drop, rain ahead. Bring an umbrella or get wet.",
+      "meaning": "ragged shower rain",
+      "icon": "522",
+      "hasDayVariant": false,
+      "heroIcon":  "300_hero"
+    },
+    {
+      "code": 600,
+      "hint": "Little snowflakes falling from the sky.",
+      "meaning": "light snow",
+      "icon": "600",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 601,
+      "hint": "It's snowing outside, everything will be white.",
+      "meaning": "snow",
+      "icon": "600",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 602,
+      "hint": "Heavy snow incoming. Be careful out there.",
+      "meaning": "heavy snow",
+      "icon": "602",
+      "hasDayVariant": false,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 611,
+      "hint": "Wrap up warm, there's sleet and showers on the way",
+      "meaning": "sleet",
+      "icon": "312",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 612,
+      "hint": "Wrap up warm, there's sleet and showers on the way",
+      "meaning": "shower sleet",
+      "icon": "312",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 615,
+      "hint": "Light rain and snow. Icy roads incoming.",
+      "meaning": "light rain and snow",
+      "icon": "615",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 616,
+      "hint": "Light rain and snow. Icy roads incoming.",
+      "meaning": "rain and snow",
+      "icon": "615",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 620,
+      "hint": "Light shower and snow. Icy roads incoming.",
+      "meaning": "light shower snow",
+      "icon": "615",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 621,
+      "hint": "Rain and snow. Icy roads incoming.",
+      "meaning": "shower snow",
+      "icon": "615",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 622,
+      "hint": "Heavy rain and snow. Icy roads incoming.",
+      "meaning": "heavy shower snow",
+      "icon": "625",
+      "hasDayVariant": true,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 700,
+      "hint": "Mist outside.",
+      "meaning": "mist",
+      "icon": "700",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 711,
+      "hint": "Smoke outside.",
+      "meaning": "smoke",
+      "icon": "700",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 721,
+      "hint": "Pretty hazy.",
+      "meaning": "haze",
+      "icon": "700",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 731,
+      "hint": "Sand and dust whirls going on.",
+      "meaning": "sand, dust whirls",
+      "icon": "731",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 741,
+      "hint": "There's fog, so not much to see.",
+      "meaning": "fog",
+      "icon": "741",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 751,
+      "hint": "Pretty sandy.",
+      "meaning": "sand",
+      "icon": "741",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 761,
+      "hint": "Pretty dusty.",
+      "meaning": "dust",
+      "icon": "741",
+      "hasDayVariant": true,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 762,
+      "hint": "Volcanic ash incoming.",
+      "meaning": "volcanic ash",
+      "icon": "741",
+      "hasDayVariant": false,
+      "heroIcon":  "700_hero"
+    },
+    {
+      "code": 771,
+      "hint": "Pretty stormy outside. Better stay somewhere safe.",
+      "meaning": "squalls",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 781,
+      "hint": "Check for tornado warnings! Stay safe!",
+      "meaning": "tornado",
+      "icon": "781",
+      "hasDayVariant": false,
+      "heroIcon":  "781"
+    },
+    {
+      "code": 800,
+      "hint": "All is nice and clear.",
+      "meaning": "clear sky",
+      "icon": "800",
+      "hasDayVariant": true,
+      "heroIcon":  "800_day"
+    },
+    {
+      "code": 801,
+      "hint": "Just a few clouds, not much to see.",
+      "meaning": "few clouds",
+      "icon": "801",
+      "hasDayVariant": true,
+      "heroIcon":  "800_hero"
+    },
+    {
+      "code": 802,
+      "hint": "Some scattered clouds, nothing else.",
+      "meaning": "scattered clouds",
+      "icon": "802",
+      "hasDayVariant": true,
+      "heroIcon":  "800_hero"
+    },
+    {
+      "code": 803,
+      "hint": "Some broken clouds, nothing else.",
+      "meaning": "broken clouds",
+      "icon": "802",
+      "hasDayVariant": true,
+      "heroIcon":  "800_hero"
+    },
+    {
+      "code": 804,
+      "hint": "Overcast clouds, not much to see up there.",
+      "meaning": "overcast clouds",
+      "icon": "804",
+      "hasDayVariant": false,
+      "heroIcon":  "800_hero"
+    },
+    {
+      "code": 900,
+      "hint": "Check for tornado warnings! Stay safe!",
+      "meaning": "tornado",
+      "icon": "781",
+      "hasDayVariant": false,
+      "heroIcon":  "781"
+    },
+    {
+      "code": 901,
+      "hint": "Check for storm warnings! Stay safe!",
+      "meaning": "tropical storm",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "781"
+    },
+    {
+      "code": 902,
+      "hint": "Check for hurricane warnings! Stay safe!",
+      "meaning": "hurricane",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "781"
+    },
+    {
+      "code": 903,
+      "hint": "Boy, it's cold. Better wrap up warm.",
+      "meaning": "cold",
+      "icon": "903",
+      "hasDayVariant": false,
+      "heroIcon":  "903"
+    },
+    {
+      "code": 904,
+      "hint": "Boy, it's hot. Stay hydrated.",
+      "meaning": "hot",
+      "icon": "904",
+      "hasDayVariant": false,
+      "heroIcon":  "904"
+    },
+    {
+      "code": 905,
+      "hint": "It's quite windy outside.",
+      "meaning": "windy",
+      "icon": "731",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 906,
+      "hint": "There's hail incoming. Be careful, take an umbrella.",
+      "meaning": "hail",
+      "icon": "511",
+      "hasDayVariant": false,
+      "heroIcon":  "600_hero"
+    },
+    {
+      "code": 951,
+      "hint": "All is calm.",
+      "meaning": "calm",
+      "icon": "800",
+      "hasDayVariant": true,
+      "heroIcon":  "800_day"
+    },
+    {
+      "code": 952,
+      "hint": "Just a light breeze.",
+      "meaning": "light breeze",
+      "icon": "700",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 953,
+      "hint": "Just a gentle breeze.",
+      "meaning": "gentle breeze",
+      "icon": "700",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 954,
+      "hint": "A moderate breeze.",
+      "meaning": "moderate breeze",
+      "icon": "731",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 955,
+      "hint": "Fresh breeze outside, stay warm.",
+      "meaning": "fresh breeze",
+      "icon": "731",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 956,
+      "hint": "Pretty strong breeze outside, be careful.",
+      "meaning": "strong breeze",
+      "icon": "741",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 957,
+      "hint": "High winds, near gale, be careful.",
+      "meaning": "high wind, near gale",
+      "icon": "741",
+      "hasDayVariant": true,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 958,
+      "hint": "A gale is blowing. Be careful.",
+      "meaning": "gale",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 959,
+      "hint": "A severe gale incoming. Stay safe!",
+      "meaning": "severe gale",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 960,
+      "hint": "There's a storm incoming. Stay safe!",
+      "meaning": "storm",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 961,
+      "hint": "Violent storm incoming! Stay safe!",
+      "meaning": "violent storm",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "770_hero"
+    },
+    {
+      "code": 962,
+      "hint": "Check for hurricane warnings! Stay safe!",
+      "meaning": "hurricane",
+      "icon": "771",
+      "hasDayVariant": false,
+      "heroIcon":  "770_hero"
+    }
+  ]
+}

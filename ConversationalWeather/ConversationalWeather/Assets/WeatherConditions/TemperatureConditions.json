@@ -1,0 +1,54 @@
+﻿{
+  "TemperatureConditions": [
+    {
+      "min": -100,
+      "max": -20,
+      "hint": "And it's REALLY cold outside! Be careful."
+    },
+    {
+      "min": -20,
+      "max": -10,
+      "hint": "And it's really cold outside. Stay warm."
+    },
+    {
+      "min": -10,
+      "max": 0,
+      "hint": "And it's pretty cold outside."
+    },
+    {
+      "min": 0,
+      "max": 10,
+      "hint": "And it's a bit cold outside."
+    },
+    {
+      "min": 10,
+      "max": 20,
+      "hint": "And it's a bit chilly. Take a jacket."
+    },
+    {
+      "min": 20,
+      "max": 25,
+      "hint": "And it's quite nice outside."
+    },
+    {
+      "min": 25,
+      "max": 30,
+      "hint": "And it's fine outside."
+    },
+    {
+      "min": 30,
+      "max": 35,
+      "hint": "And it's warm and cozy outside."
+    },
+    {
+      "min": 35,
+      "max": 40,
+      "hint": "Phew, it's really warm outside!"
+    },
+    {
+      "min": 40,
+      "max": 100,
+      "hint": "Ugh, it's really hot outside. Stay hydrated."
+    }
+  ]
+}
