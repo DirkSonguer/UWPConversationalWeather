@@ -30,9 +30,9 @@
                     <TextBlock x:Name="textWeatherForecast" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                     <StackPanel x:Name="imagePanel" Margin="0,20,0,0" VerticalAlignment="Top" Orientation="Horizontal">
                         <Image x:Name="imageWeatherIcon1" Margin="0,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
-                        <Image x:Name="imageWeatherIcon2" Margin="0,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
-                        <Image x:Name="imageWeatherIcon3" Margin="0,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
-                        <Image x:Name="imageWeatherIcon4" Margin="0,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
+                        <Image x:Name="imageWeatherIcon2" Margin="10,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
+                        <Image x:Name="imageWeatherIcon3" Margin="10,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
+                        <Image x:Name="imageWeatherIcon4" Margin="10,0,0,0" Width="50" HorizontalAlignment="Left" Opacity="1" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -45,7 +45,7 @@
                     <StackPanel Margin="0,30,0,0" VerticalAlignment="Top">
                         <ToggleSwitch x:Name="toggleTemperatureUnit" Header="Temperature units" Toggled="ToggleTemperatureUnit_Toggled" OffContent="Fahrenheit" OnContent="Celsius" RequestedTheme="Dark" IsOn="True" UseSystemFocusVisuals="True" />
                     </StackPanel>
-                    <TextBlock Margin="0,20,0,0" Foreground="White" TextWrapping="WrapWholeWords" Text="Conversational Weather uses the free Open Weather Maps API to acquire the weather data for your current location. It also uses the wonderful Meteocons icon set for the weather state icons. Everything else is lovingly hand-crafted and available as open source on GitHub." HorizontalAlignment="Left" FontSize="14" FontWeight="Light" Tapped="labelAboutApplication_Tapped" />
+                    <TextBlock Margin="0,20,0,0" Foreground="White" TextWrapping="WrapWholeWords" Text="Conversational Weather uses the free Open Weather Maps API to acquire the weather data for your current location. It also uses the wonderful Dripicons by Amit Jakhu icon set for the weather conditions. Everything else is lovingly hand-crafted and available as open source on GitHub." HorizontalAlignment="Left" FontSize="14" FontWeight="Light" Tapped="labelAboutApplication_Tapped" />
                 </StackPanel>
                 <StackPanel Margin="0,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
                     <Image Source="Assets/Wide310x150Logo.scale-200.png" Margin="0,0,0,10" Height="120" HorizontalAlignment="Center" Opacity="0.15" />

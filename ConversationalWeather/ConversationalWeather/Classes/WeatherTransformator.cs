@@ -1,6 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.Storage;
+using Newtonsoft.Json;
 using ConversationalWeather.Objects;
+
+using System.ComponentModel;
+using System.IO;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.ViewManagement;
+using Windows.UI.Notifications;
+using ConversationalWeather.Classes;
+using System.Linq;
 
 namespace ConversationalWeather.Classes
 {
@@ -9,9 +21,20 @@ namespace ConversationalWeather.Classes
         // initialise dictionary containing the states of the weather forecast
         public Dictionary<string, int> weatherForecastStates = new Dictionary<string, int>();
 
+        public WeatherConditionList WeatherConditions { get; set; }
+
         // constructor
         public WeatherTransformator()
         {
+            this.loadWeatherConditions();
+        }
+
+        async public void loadWeatherConditions()
+        {
+            StorageFile forecastConditionFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///Assets/WeatherConditions/WeatherConditions.json"));
+            string jsonForecastCondition = await FileIO.ReadTextAsync(forecastConditionFile);
+
+            WeatherConditions = JsonConvert.DeserializeObject<WeatherConditionList>(jsonForecastCondition);
         }
 
         // aggregate and create the location information text
@@ -112,52 +135,15 @@ namespace ConversationalWeather.Classes
             // note that all the groups are defined weather conditions by OpenWeatherMap
             // http://openweathermap.org/weather-conditions
 
-            // group 2xx: thunderstorm
-            if ((weatherForecast.list[0].weather[0].id >= 200) && (weatherForecast.list[0].weather[0].id <= 299))
-            {
-                temperatureHint += "There is a " + weatherForecast.list[0].weather[0].description + " going on. Or will be soon. Better get inside!";
-            }
+            WeatherCondition currentWeatherCondition = WeatherConditions.WeatherConditions.Find(item => item.code == weatherForecast.list[0].weather[0].id);
 
-            // group 3xx: drizzle
-            if ((weatherForecast.list[0].weather[0].id >= 300) && (weatherForecast.list[0].weather[0].id <= 399))
+            if (currentWeatherCondition != null)
             {
-                temperatureHint += "Drip, drop, " + weatherForecast.list[0].weather[0].description + " outside. Better bring an umbrella.";
+                temperatureHint += currentWeatherCondition.hint;
             }
-
-            // group 5xx: rain
-            if ((weatherForecast.list[0].weather[0].id >= 500) && (weatherForecast.list[0].weather[0].id <= 600))
+            else
             {
-                temperatureHint += "Meh, " + weatherForecast.list[0].weather[0].description + " outside or coming up. Better get somewhere dry.";
-            }
-
-            // group 6xx: snow
-            if ((weatherForecast.list[0].weather[0].id >= 600) && (weatherForecast.list[0].weather[0].id <= 699))
-            {
-                temperatureHint += "Brr, there is " + weatherForecast.list[0].weather[0].description + " outside. Keep yourself warm.";
-            }
-
-            // group 7xx: atmosphere
-            if ((weatherForecast.list[0].weather[0].id >= 700) && (weatherForecast.list[0].weather[0].id <= 799))
-            {
-                temperatureHint += "Oh! A bit of " + weatherForecast.list[0].weather[0].description + "! Really?";
-            }
-
-            // group 800: clear
-            if (weatherForecast.list[0].weather[0].id == 800)
-            {
-                temperatureHint += "All is clear, nothing to see.";
-            }
-
-            // group 80x: clouds
-            if ((weatherForecast.list[0].weather[0].id >= 801) && (weatherForecast.list[0].weather[0].id <= 899))
-            {
-                temperatureHint = "It's cloudy. Just some " + weatherForecast.list[0].weather[0].description + ".";
-            }
-
-            // group 9xx: extreme
-            if ((weatherForecast.list[0].weather[0].id >= 900) && (weatherForecast.list[0].weather[0].id <= 999))
-            {
-                temperatureHint = "Oh? Wow!. Be careful out there!";
+                temperatureHint += "The weather seems strange.";
             }
 
             int celsiusTemperature = 0;
@@ -169,13 +155,13 @@ namespace ConversationalWeather.Classes
             // VERY cold
             if (celsiusTemperature < -10)
             {
-                temperatureHint += "really COLD!";
+                temperatureHint += "really COLD";
             }
 
             // very cold
             if ((celsiusTemperature >= -10) && (celsiusTemperature < 0))
             {
-                temperatureHint += "pretty cold.";
+                temperatureHint += "pretty cold";
             }
 
             // cold
@@ -196,8 +182,14 @@ namespace ConversationalWeather.Classes
                 temperatureHint += "quite nice";
             }
 
+            // warm
+            if ((celsiusTemperature >= 30) && (celsiusTemperature < 35))
+            {
+                temperatureHint += "warm and cozy";
+            }
+
             // hot
-            if ((celsiusTemperature >= 30) && (celsiusTemperature < 40))
+            if ((celsiusTemperature >= 35) && (celsiusTemperature < 40))
             {
                 temperatureHint += "pretty hot";
             }

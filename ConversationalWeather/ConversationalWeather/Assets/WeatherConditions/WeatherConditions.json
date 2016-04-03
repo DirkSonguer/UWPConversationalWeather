@@ -1,0 +1,515 @@
+﻿{
+  "WeatherConditions": [
+    {
+      "code": 200,
+      "hint": "A teeny-weeny thunderstorm is visiting town. Better get inside.",
+      "meaning": "thunderstorm with light rain",
+      "icon": "200",
+      "hasDayVariant": false
+    },
+    {
+      "code": 201,
+      "hint": "A thunderstorm is brewing. And it's raining. Better get inside.",
+      "meaning": "thunderstorm with rain",
+      "icon":  "201",
+      "hasDayVariant": false
+    },
+    {
+      "code": 202,
+      "hint": "Boom, bang! Splish splosh! Thunderstorm and heavy rain. Better get inside.",
+      "meaning": "thunderstorm with heavy rain",
+      "icon":  "201",
+      "hasDayVariant": false
+    },
+    {
+      "code": 210,
+      "hint": "A teeny-weeny thunderstorm is visiting town. Better get inside.",
+      "meaning": "light thunderstorm",
+      "icon":  "200",
+      "hasDayVariant": false
+    },
+    {
+      "code": 211,
+      "hint": "A thunderstorm is brewing. And it's raining. Better get inside.",
+      "meaning": "thunderstorm",
+      "icon":  "200",
+      "hasDayVariant": false
+    },
+    {
+      "code": 212,
+      "hint": "Boom, bang! Splish splosh! Heavy thunderstorm incoming. Better get inside.",
+      "meaning": "heavy thunderstorm",
+      "icon":  "201",
+      "hasDayVariant": false
+    },
+    {
+      "code": 221,
+      "hint": "A thunderstorm is brewing. Or something like that. Better get inside.",
+      "meaning": "ragged thunderstorm",
+      "icon":  "230",
+      "hasDayVariant": true
+    },
+    {
+      "code": 230,
+      "hint": "A teeny-weeny thunderstorm is visiting town. Better get inside.",
+      "meaning": "thunderstorm with light drizzle",
+      "icon":  "230",
+      "hasDayVariant": true
+    },
+    {
+      "code": 231,
+      "hint": "A thunderstorm is brewing. And it's raining. Better get inside.",
+      "meaning": "thunderstorm with drizzle",
+      "icon":  "231",
+      "hasDayVariant": true
+    },
+    {
+      "code": 232,
+      "hint": "Boom, bang! Splish splosh! Heavy thunderstorm incoming. Better get inside.",
+      "meaning": "thunderstorm with heavy drizzle",
+      "icon":  "231",
+      "hasDayVariant": true
+    },
+    {
+      "code": 300,
+      "hint": "Drip, drop, some light drizzle outside. Better bring an umbrella.",
+      "meaning": "light intensity drizzle",
+      "icon":  "300",
+      "hasDayVariant": true
+    },
+    {
+      "code": 301,
+      "hint": "Drip, drop, some drizzle outside. Better bring an umbrella.",
+      "meaning": "drizzle",
+      "icon":  "300",
+      "hasDayVariant": true
+    },
+    {
+      "code": 302,
+      "hint": "Splish, splosh, heavy drizzle outside. Better bring an umbrella.",
+      "meaning": "heavy intensity drizzle",
+      "icon":  "302",
+      "hasDayVariant": true
+    },
+    {
+      "code": 310,
+      "hint": "",
+      "meaning": "light intensity drizzle rain",
+      "icon":  "310",
+      "hasDayVariant": true
+    },
+    {
+      "code": 311,
+      "hint": "",
+      "meaning": "drizzle rain",
+      "icon":  "310",
+      "hasDayVariant": true
+    },
+    {
+      "code": 312,
+      "hint": "",
+      "meaning": "heavy intensity drizzle rain",
+      "icon":  "310",
+      "hasDayVariant": true
+    },
+    {
+      "code": 313,
+      "hint": "",
+      "meaning": "shower rain and drizzle",
+      "icon":  "312",
+      "hasDayVariant": false
+    },
+    {
+      "code": 314,
+      "hint": "",
+      "meaning": "heavy shower rain and drizzle",
+      "icon":  "312",
+      "hasDayVariant": false
+    },
+    {
+      "code": 321,
+      "hint": "",
+      "meaning": "shower drizzle",
+      "icon":  "312",
+      "hasDayVariant": false
+    },
+    {
+      "code": 500,
+      "hint": "",
+      "meaning": "light rain",
+      "icon":  "300",
+      "hasDayVariant": true
+    },
+    {
+      "code": 501,
+      "hint": "",
+      "meaning": "moderate rain",
+      "icon":  "302",
+      "hasDayVariant": true
+    },
+    {
+      "code": 502,
+      "hint": "",
+      "meaning": "heavy intensity rain",
+      "icon":  "302",
+      "hasDayVariant": true
+    },
+    {
+      "code": 503,
+      "hint": "",
+      "meaning": "very heavy rain",
+      "icon":  "503",
+      "hasDayVariant": false
+    },
+    {
+      "code": 504,
+      "hint": "",
+      "meaning": "extreme rain",
+      "icon":  "503",
+      "hasDayVariant": false
+    },
+    {
+      "code": 511,
+      "hint": "",
+      "meaning": "freezing rain",
+      "icon":  "312",
+      "hasDayVariant": false
+    },
+    {
+      "code": 520,
+      "hint": "",
+      "meaning": "light intensity shower rain",
+      "icon":  "500",
+      "hasDayVariant": false
+    },
+    {
+      "code": 521,
+      "hint": "",
+      "meaning": "shower rain",
+      "icon":  "502",
+      "hasDayVariant": false
+    },
+    {
+      "code": 522,
+      "hint": "",
+      "meaning": "heavy intensity shower rain",
+      "icon":  "522",
+      "hasDayVariant": true
+    },
+    {
+      "code": 531,
+      "hint": "",
+      "meaning": "ragged shower rain",
+      "icon":  "522",
+      "hasDayVariant": false
+    },
+    {
+      "code": 600,
+      "hint": "",
+      "meaning": "light snow",
+      "icon":  "600",
+      "hasDayVariant": true
+    },
+    {
+      "code": 601,
+      "hint": "",
+      "meaning": "snow",
+      "icon":  "600",
+      "hasDayVariant": true
+    },
+    {
+      "code": 602,
+      "hint": "",
+      "meaning": "heavy snow",
+      "icon":  "602",
+      "hasDayVariant": false
+    },
+    {
+      "code": 611,
+      "hint": "",
+      "meaning": "sleet",
+      "icon":  "312",
+      "hasDayVariant": true
+    },
+    {
+      "code": 612,
+      "hint": "",
+      "meaning": "shower sleet",
+      "icon":  "312",
+      "hasDayVariant": true
+    },
+    {
+      "code": 615,
+      "hint": "",
+      "meaning": "light rain and snow",
+      "icon":  "615",
+      "hasDayVariant": true
+    },
+    {
+      "code": 616,
+      "hint": "",
+      "meaning": "rain and snow",
+      "icon":  "615",
+      "hasDayVariant": true
+    },
+    {
+      "code": 620,
+      "hint": "",
+      "meaning": "light shower snow",
+      "icon":  "615",
+      "hasDayVariant": true
+    },
+    {
+      "code": 621,
+      "hint": "",
+      "meaning": "shower snow",
+      "icon":  "615",
+      "hasDayVariant": true
+    },
+    {
+      "code": 622,
+      "hint": "",
+      "meaning": "heavy shower snow",
+      "icon":  "625",
+      "hasDayVariant": true
+    },
+    {
+      "code": 700,
+      "hint": "",
+      "meaning": "mist",
+      "icon":  "700",
+      "hasDayVariant": true
+    },
+    {
+      "code": 711,
+      "hint": "",
+      "meaning": "smoke",
+      "icon":  "700",
+      "hasDayVariant": true
+    },
+    {
+      "code": 721,
+      "hint": "",
+      "meaning": "haze",
+      "icon":  "700",
+      "hasDayVariant": true
+    },
+    {
+      "code": 731,
+      "hint": "",
+      "meaning": "sand, dust whirls",
+      "icon":  "731",
+      "hasDayVariant": true
+    },
+    {
+      "code": 741,
+      "hint": "",
+      "meaning": "fog",
+      "icon":  "741",
+      "hasDayVariant": true
+    },
+    {
+      "code": 751,
+      "hint": "",
+      "meaning": "sand",
+      "icon":  "741",
+      "hasDayVariant": true
+    },
+    {
+      "code": 761,
+      "hint": "",
+      "meaning": "dust",
+      "icon":  "741",
+      "hasDayVariant": true
+    },
+    {
+      "code": 762,
+      "hint": "",
+      "meaning": "volcanic ash",
+      "icon":  "741",
+      "hasDayVariant": false
+    },
+    {
+      "code": 771,
+      "hint": "",
+      "meaning": "squalls",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 781,
+      "hint": "",
+      "meaning": "tornado",
+      "icon": "781",
+      "hasDayVariant": false
+    },
+    {
+      "code": 800,
+      "hint": "",
+      "meaning": "clear sky",
+      "icon":  "800",
+      "hasDayVariant": true
+    },
+    {
+      "code": 801,
+      "hint": "",
+      "meaning": "few clouds",
+      "icon":  "801",
+      "hasDayVariant": true
+    },
+    {
+      "code": 802,
+      "hint": "",
+      "meaning": "scattered clouds",
+      "icon":  "802",
+      "hasDayVariant": true
+    },
+    {
+      "code": 803,
+      "hint": "",
+      "meaning": "broken clouds",
+      "icon": "802",
+      "hasDayVariant": true
+    },
+    {
+      "code": 804,
+      "hint": "",
+      "meaning": "overcast clouds",
+      "icon":  "804",
+      "hasDayVariant": false
+    },
+    {
+      "code": 900,
+      "hint": "",
+      "meaning": "tornado",
+      "icon":  "781",
+      "hasDayVariant": false
+    },
+    {
+      "code": 901,
+      "hint": "",
+      "meaning": "tropical storm",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 902,
+      "hint": "",
+      "meaning": "hurricane",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 903,
+      "hint": "",
+      "meaning": "cold",
+      "icon":  "903",
+      "hasDayVariant": false
+    },
+    {
+      "code": 904,
+      "hint": "",
+      "meaning": "hot",
+      "icon":  "904",
+      "hasDayVariant": false
+    },
+    {
+      "code": 905,
+      "hint": "",
+      "meaning": "windy",
+      "icon": "731",
+      "hasDayVariant": true
+    },
+    {
+      "code": 906,
+      "hint": "",
+      "meaning": "hail",
+      "icon":  "511",
+      "hasDayVariant": false
+    },
+    {
+      "code": 951,
+      "hint": "",
+      "meaning": "calm",
+      "icon":  "800",
+      "hasDayVariant": true
+    },
+    {
+      "code": 952,
+      "hint": "",
+      "meaning": "light breeze",
+      "icon":  "700",
+      "hasDayVariant": true
+    },
+    {
+      "code": 953,
+      "hint": "",
+      "meaning": "gentle breeze",
+      "icon": "700",
+      "hasDayVariant": true
+    },
+    {
+      "code": 954,
+      "hint": "",
+      "meaning": "moderate breeze",
+      "icon":  "731",
+      "hasDayVariant": true
+    },
+    {
+      "code": 955,
+      "hint": "",
+      "meaning": "fresh breeze",
+      "icon":  "731",
+      "hasDayVariant": true
+    },
+    {
+      "code": 956,
+      "hint": "",
+      "meaning": "strong breeze",
+      "icon":  "741",
+      "hasDayVariant": true
+    },
+    {
+      "code": 957,
+      "hint": "",
+      "meaning": "high wind, near gale",
+      "icon":  "741",
+      "hasDayVariant": true
+    },
+    {
+      "code": 958,
+      "hint": "",
+      "meaning": "gale",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 959,
+      "hint": "",
+      "meaning": "severe gale",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 960,
+      "hint": "",
+      "meaning": "storm",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 961,
+      "hint": "",
+      "meaning": "violent storm",
+      "icon":  "771",
+      "hasDayVariant": false
+    },
+    {
+      "code": 962,
+      "hint": "",
+      "meaning": "hurricane",
+      "icon":  "771",
+      "hasDayVariant": false
+    }
+  ]
+}
