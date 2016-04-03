@@ -93,6 +93,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\WeatherConditions\TemperatureConditions.json" />
     <None Include="ConversationalWeather_StoreKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
@@ -106,6 +107,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\TemperatureConditionList.cs" />
     <Compile Include="Structures\WeatherConditionList.cs" />
     <Compile Include="Structures\WeatherForecastObject.cs" />
   </ItemGroup>
@@ -120,6 +122,7 @@
     <Content Include="Assets\WeatherConditions\WeatherConditions.json" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\WeatherIcons\200.png" />
+    <Content Include="Assets\WeatherIcons\200_hero.png" />
     <Content Include="Assets\WeatherIcons\201.png" />
     <Content Include="Assets\WeatherIcons\211.png" />
     <Content Include="Assets\WeatherIcons\230_day.png" />
@@ -127,6 +130,7 @@
     <Content Include="Assets\WeatherIcons\231_day.png" />
     <Content Include="Assets\WeatherIcons\231_night.png" />
     <Content Include="Assets\WeatherIcons\300_day.png" />
+    <Content Include="Assets\WeatherIcons\300_hero.png" />
     <Content Include="Assets\WeatherIcons\300_night.png" />
     <Content Include="Assets\WeatherIcons\302_day.png" />
     <Content Include="Assets\WeatherIcons\302_night.png" />
@@ -139,19 +143,23 @@
     <Content Include="Assets\WeatherIcons\522_day.png" />
     <Content Include="Assets\WeatherIcons\522_night.png" />
     <Content Include="Assets\WeatherIcons\600_day.png" />
+    <Content Include="Assets\WeatherIcons\600_hero.png" />
     <Content Include="Assets\WeatherIcons\600_night.png" />
     <Content Include="Assets\WeatherIcons\602.png" />
     <Content Include="Assets\WeatherIcons\615_day.png" />
     <Content Include="Assets\WeatherIcons\615_night.png" />
     <Content Include="Assets\WeatherIcons\700_day.png" />
+    <Content Include="Assets\WeatherIcons\700_hero.png" />
     <Content Include="Assets\WeatherIcons\700_night.png" />
     <Content Include="Assets\WeatherIcons\731_day.png" />
     <Content Include="Assets\WeatherIcons\731_night.png" />
     <Content Include="Assets\WeatherIcons\741_day.png" />
     <Content Include="Assets\WeatherIcons\741_night.png" />
+    <Content Include="Assets\WeatherIcons\770_hero.png" />
     <Content Include="Assets\WeatherIcons\771.png" />
     <Content Include="Assets\WeatherIcons\781.png" />
     <Content Include="Assets\WeatherIcons\800_day.png" />
+    <Content Include="Assets\WeatherIcons\800_hero.png" />
     <Content Include="Assets\WeatherIcons\800_night.png" />
     <Content Include="Assets\WeatherIcons\801_day.png" />
     <Content Include="Assets\WeatherIcons\801_night.png" />
@@ -160,6 +168,7 @@
     <Content Include="Assets\WeatherIcons\804.png" />
     <Content Include="Assets\WeatherIcons\903.png" />
     <Content Include="Assets\WeatherIcons\904.png" />
+    <Content Include="Assets\WeatherIcons\905.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

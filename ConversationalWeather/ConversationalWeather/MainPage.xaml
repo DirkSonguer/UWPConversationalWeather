@@ -16,10 +16,10 @@
                 </StackPanel>
                 <StackPanel x:Name="panelContent" Margin="0,0,0,0" VerticalAlignment="Top" Visibility="Collapsed">
                     <TextBlock x:Name="textLocationInformation" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
-                    <TextBlock x:Name="textTemperatureHint" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
+                    <TextBlock x:Name="textWeatherCondition" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                 </StackPanel>
                 <StackPanel Margin="0,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Image x:Name="imageTemperatureIcon1" Margin="0,0,0,0" Height="150" HorizontalAlignment="Center" Opacity="0.15" />
+                    <Image x:Name="imageWeatherCondition" Margin="0,0,0,10" Height="150" HorizontalAlignment="Center" Opacity="0.15" />
                 </StackPanel>
             </Grid>
         </PivotItem>

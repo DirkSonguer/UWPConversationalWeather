@@ -13,6 +13,7 @@ namespace ConversationalWeather.Objects
         public string meaning { get; set; }
         public string icon { get; set; }
         public bool hasDayVariant { get; set; }
+        public string heroIcon { get; set; }
     }
 
     public class WeatherConditionList
