@@ -1,11 +1,11 @@
 # Conversational Weather: Glanceable weather information to prepare you for the day
 
 This is a simple, native weather app for Windows 10 Mobile, made with UWP.
-It uses OpenWeatherMap to pull the weather data and the Meteocons icon
+It uses OpenWeatherMap to pull the weather data and the Dripicons icon
 set for the icons.
 
 Note that the goal of this app was not to create a polished weather app, but to
-learn the basics of Windows 10 development. So assume that the code is probably
+learn the basics of Windows 10 UWP development. So assume that the code is probably
 not the best source of reference on how to implement things.
 
 Author: Dirk Songuer

@@ -13,17 +13,17 @@
     {
       "min": -10,
       "max": 0,
-      "hint": "And it's pretty cold outside."
+      "hint": "And it's pretty cold outside. Take a warm coat."
     },
     {
       "min": 0,
       "max": 10,
-      "hint": "And it's a bit cold outside."
+      "hint": "And it's a bit cold outside. Take a jacket."
     },
     {
       "min": 10,
       "max": 20,
-      "hint": "And it's a bit chilly. Take a jacket."
+      "hint": "And it's a bit chilly. Take a light jacket."
     },
     {
       "min": 20,
@@ -43,7 +43,7 @@
     {
       "min": 35,
       "max": 40,
-      "hint": "Phew, it's really warm outside!"
+      "hint": "Phew, it's really warm outside."
     },
     {
       "min": 40,

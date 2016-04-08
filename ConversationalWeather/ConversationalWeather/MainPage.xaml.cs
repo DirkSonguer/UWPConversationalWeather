@@ -8,7 +8,6 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
 using Windows.Storage;
-using ConversationalWeather.Objects;
 using ConversationalWeather.Classes;
 
 namespace ConversationalWeather
@@ -167,7 +166,7 @@ namespace ConversationalWeather
 
                 // here we can assume that the file does exist
                 // we create a bitmap with the icon and load it into the respective image icon slot
-                // btw. the following link helped me as some namespaces are different for UWP than standard windows / WFP
+                // btw. the following link helped me as some namespaces are different for UWP than standard windows / WPF
                 // https://msdn.microsoft.com/en-us/windows/uwp/porting/wpsl-to-uwp-namespace-and-class-mappings
                 BitmapImage bitmapImage = new BitmapImage(new Uri(this.BaseUri, imageUri));
                 imageComponent.Source = bitmapImage;
