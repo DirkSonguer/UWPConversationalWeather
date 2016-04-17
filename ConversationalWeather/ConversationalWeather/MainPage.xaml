@@ -9,7 +9,7 @@
 
     <ScrollViewer x:Name="scrollMainContainer" Width="Auto" Height="Auto" HorizontalSnapPointsType="MandatorySingle">
         <StackPanel Orientation="Horizontal">
-            <StackPanel x:Name="panelColumn0" Grid.Column="0" Background="CadetBlue">
+            <StackPanel x:Name="panelColumn0" Background="CadetBlue">
                 <StackPanel x:Name="panelLoadingProgress" Margin="10,10,10,10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <ProgressRing RequestedTheme="Dark" IsActive="True" Foreground="White" />
                     <TextBlock x:Name="textLoadingStatus" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="18" FontWeight="Light"/>
@@ -23,7 +23,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel x:Name="panelColumn1" Grid.Column="1" Background="Teal">
+            <StackPanel x:Name="panelColumn1" Background="Teal">
                 <StackPanel Margin="10,10,10,10" VerticalAlignment="Top">
                     <TextBlock x:Name="textTemperatureInformation" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
                     <TextBlock x:Name="textWeatherForecast" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
@@ -36,7 +36,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel x:Name="panelColumn2" Grid.Column="2" Background="SlateGray">
+            <StackPanel x:Name="panelColumn2" Background="SlateGray">
                 <StackPanel Margin="10,10,10,10" VerticalAlignment="Top">
                     <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="A little app by Dirk Songuer." HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light" Tapped="labelAboutAuthor_Tapped" />
                     <TextBlock Foreground="White" TextWrapping="WrapWholeWords" Text="This application will not send or store any personal data." HorizontalAlignment="Left" FontSize="44" FontWeight="Normal" />

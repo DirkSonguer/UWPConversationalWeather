@@ -37,6 +37,7 @@ namespace ConversationalWeather
         // flag that all components have been initialised
         bool componentInitialisationDone = false;
 
+        // main page constructor
         public MainPage()
         {
             // initialise component
@@ -62,6 +63,7 @@ namespace ConversationalWeather
             // respond to dynamic changes in user interaction mode and window size changes
             Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.AdaptUIElements);
 
+            // initially adapt the UI elements
             this.AdaptUIElements(null, null);
 
             // load the weather data
@@ -71,6 +73,8 @@ namespace ConversationalWeather
             componentInitialisationDone = true;
         }
 
+        // adapt UI elements if the screen size has been changed
+        // this is used to adapt from mobile to desktop or continuum
         private void AdaptUIElements(object sender, WindowSizeChangedEventArgs e)
         {
             // set icon size to quarter of the screen width
@@ -127,9 +131,9 @@ namespace ConversationalWeather
         public void LoadWeatherData(object sender, DoubleTappedRoutedEventArgs e)
         {
             // hide UI and show loader
-            panelColumn1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            panelContent.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            panelColumn1.Visibility = Visibility.Collapsed;
+            panelContent.Visibility = Visibility.Collapsed;
+            panelLoadingProgress.Visibility = Visibility.Visible;
 
             // first get current geolocation
             // note that his will trigger a weather forecast for this location
@@ -198,9 +202,9 @@ namespace ConversationalWeather
             this.UpdateActiveTile();
 
             // hide the loader and show UI elements for data
-            panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            panelColumn1.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            panelContent.Visibility = Visibility.Visible;
+            panelLoadingProgress.Visibility = Visibility.Collapsed;
+            panelColumn1.Visibility = Visibility.Visible;
         }
 
         // this will load a weather icon
@@ -266,7 +270,7 @@ namespace ConversationalWeather
         }
 
         // temperature unit has changed
-        private void ToggleTemperatureUnit_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void ToggleTemperatureUnit_Toggled(object sender, RoutedEventArgs e)
         {
             if (componentInitialisationDone)
             {
