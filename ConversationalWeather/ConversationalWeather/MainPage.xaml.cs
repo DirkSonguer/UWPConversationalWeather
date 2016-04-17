@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
@@ -54,15 +56,13 @@ namespace ConversationalWeather
             weatherIconDictionary.Add(2, imageWeatherIcon3);
             weatherIconDictionary.Add(3, imageWeatherIcon4);
 
-            // set icon size to quarter of the screen width
-            Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
-            imageWeatherIcon1.Width = ((bounds.Width - 30) / 4.5);
-            imageWeatherIcon2.Width = ((bounds.Width - 30) / 4.5);
-            imageWeatherIcon3.Width = ((bounds.Width - 30) / 4.5);
-            imageWeatherIcon4.Width = ((bounds.Width - 30) / 4.5);
-
             // add double tap event to switch page
-            pageGrid.DoubleTapped += new DoubleTappedEventHandler(this.LoadWeatherData);
+            panelColumn0.DoubleTapped += new DoubleTappedEventHandler(this.LoadWeatherData);
+
+            // respond to dynamic changes in user interaction mode and window size changes
+            Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.AdaptUIElements);
+
+            this.AdaptUIElements(null, null);
 
             // load the weather data
             this.LoadWeatherData(null, null);
@@ -71,12 +71,63 @@ namespace ConversationalWeather
             componentInitialisationDone = true;
         }
 
+        private void AdaptUIElements(object sender, WindowSizeChangedEventArgs e)
+        {
+            // set icon size to quarter of the screen width
+            Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+
+            // check for user interaction mode
+            switch (UIViewSettings.GetForCurrentView().UserInteractionMode)
+            {
+                // when mouse is returned, use desktop layout
+                case UserInteractionMode.Mouse:
+                    // set icon size
+                    imageWeatherIcon1.Width = ((bounds.Width - 30) / 13.5);
+                    imageWeatherIcon2.Width = ((bounds.Width - 30) / 13.5);
+                    imageWeatherIcon3.Width = ((bounds.Width - 30) / 13.5);
+                    imageWeatherIcon4.Width = ((bounds.Width - 30) / 13.5);
+
+                    // set column sizes
+                    panelColumn0.Width = bounds.Width / 3;
+                    panelColumn1.Width = bounds.Width / 3;
+                    panelColumn2.Width = bounds.Width / 3;
+
+                    // set scroll modes
+                    scrollMainContainer.HorizontalScrollMode = ScrollMode.Disabled;
+                    scrollMainContainer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                    scrollMainContainer.VerticalScrollMode = ScrollMode.Disabled;
+                    scrollMainContainer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                    break;
+
+                // when touch is returned, use mobile layout
+                case UserInteractionMode.Touch:
+                default:
+                    // set icon size
+                    imageWeatherIcon1.Width = ((bounds.Width - 30) / 4.5);
+                    imageWeatherIcon2.Width = ((bounds.Width - 30) / 4.5);
+                    imageWeatherIcon3.Width = ((bounds.Width - 30) / 4.5);
+                    imageWeatherIcon4.Width = ((bounds.Width - 30) / 4.5);
+
+                    // set column sizes
+                    panelColumn0.Width = bounds.Width;
+                    panelColumn1.Width = bounds.Width;
+                    panelColumn2.Width = bounds.Width;
+
+                    // set scroll modes
+                    scrollMainContainer.HorizontalScrollMode = ScrollMode.Enabled;
+                    scrollMainContainer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    scrollMainContainer.VerticalScrollMode = ScrollMode.Disabled;
+                    scrollMainContainer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                    break;
+            }
+        }
+
         // trigger to reload the weather data
         // this will also take care of resetting the UI
         public void LoadWeatherData(object sender, DoubleTappedRoutedEventArgs e)
         {
             // hide UI and show loader
-            rootPivot.Items.Remove(pivotTemperatureItem);
+            panelColumn1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             panelContent.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
@@ -149,7 +200,7 @@ namespace ConversationalWeather
             // hide the loader and show UI elements for data
             panelContent.Visibility = Windows.UI.Xaml.Visibility.Visible;
             panelLoadingProgress.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            rootPivot.Items.Insert(1, pivotTemperatureItem);
+            panelColumn1.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         // this will load a weather icon
@@ -225,14 +276,6 @@ namespace ConversationalWeather
                 // store flag in local storage
                 applicationSettings.Values["useCelsius"] = toggleTemperatureUnit.IsOn;
             }
-        }
-
-        // current pivot item has changed
-        private void RootPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // set the background color brush of the root pivot to the background color of the current pivot item
-            // this basically leads to a smooth transition from one color to the next when switching pivot items
-            rootPivot.Background = (rootPivot.Items[rootPivot.SelectedIndex] as PivotItem).Background;
         }
 
         // author information label was tapped
