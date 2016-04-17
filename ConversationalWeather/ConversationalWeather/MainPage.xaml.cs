@@ -80,6 +80,10 @@ namespace ConversationalWeather
             // set icon size to quarter of the screen width
             Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
 
+            // set the bounds to the entire window
+            // this will make the status bar transparents
+            ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+
             // check for user interaction mode
             switch (UIViewSettings.GetForCurrentView().UserInteractionMode)
             {
