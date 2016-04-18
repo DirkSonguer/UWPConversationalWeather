@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ScrollViewer x:Name="scrollMainContainer" Width="Auto" Height="Auto" Background="AntiqueWhite" HorizontalSnapPointsType="MandatorySingle">
+    <ScrollViewer x:Name="scrollMainContainer" Width="Auto" Height="Auto" HorizontalSnapPointsType="MandatorySingle">
         <StackPanel Orientation="Horizontal">
             <StackPanel x:Name="panelColumn0" Background="CadetBlue">
                 <StackPanel x:Name="panelLoadingProgress" Margin="10,20,10,10" VerticalAlignment="Center" HorizontalAlignment="Center">

@@ -243,7 +243,7 @@ namespace ConversationalWeather
             string xmlDocumentContent = FileIO.ReadTextAsync(xmlDocument).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
 
             // set the current main weather state icon
-            xmlDocumentContent = xmlDocumentContent.Replace("{{TileWeatherStateIcon}}", mainWeatherIcon);
+            xmlDocumentContent = xmlDocumentContent.Replace("{{TileWeatherStateIcon}}", weatherTransformator.GetConditionIcon(weatherApi.WeatherForecast.list[0].weather[0].id));
 
             // build temperature string
             // note that we change the temperature unit sign according to the chosen one
