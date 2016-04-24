@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,7 +11,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
-using Windows.Storage;
 using ConversationalWeather.Classes;
 
 namespace ConversationalWeather
@@ -30,9 +31,6 @@ namespace ConversationalWeather
 
         // application settings container
         ApplicationDataContainer applicationSettings = ApplicationData.Current.LocalSettings;
-
-        // this will hold the main weather icon that is then used in the active tile
-        string mainWeatherIcon = "";
 
         // flag that all components have been initialised
         bool componentInitialisationDone = false;
@@ -78,7 +76,7 @@ namespace ConversationalWeather
         private void AdaptUIElements(object sender, WindowSizeChangedEventArgs e)
         {
             // set icon size to quarter of the screen width
-            Windows.Foundation.Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+            Rect bounds = ApplicationView.GetForCurrentView().VisibleBounds;
 
             // set the bounds to the entire window
             // this will make the status bar transparents

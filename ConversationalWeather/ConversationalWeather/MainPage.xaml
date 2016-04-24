@@ -18,7 +18,7 @@
                     <TextBlock x:Name="textLocationInformation" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="24" FontStyle="Italic" FontWeight="Light"/>
                     <TextBlock x:Name="textWeatherCondition" Foreground="White" TextWrapping="WrapWholeWords" Text="" HorizontalAlignment="Left" FontSize="44" FontWeight="Normal"/>
                 </StackPanel>
-                <StackPanel Margin="0,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Margin="0,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Image x:Name="imageWeatherCondition" Margin="0,0,0,10" Height="150" HorizontalAlignment="Center" Opacity="0.15" />
                 </StackPanel>
             </StackPanel>
@@ -45,7 +45,7 @@
                     </StackPanel>
                     <TextBlock Margin="0,20,0,0" Foreground="White" TextWrapping="WrapWholeWords" Text="Conversational Weather uses the free Open Weather Maps API to acquire the weather data for your current location. It also uses the wonderful Dripicons icon set by Amit Jakhu for the weather conditions. Everything else is lovingly hand-crafted and available as open source on GitHub." HorizontalAlignment="Left" FontSize="14" FontWeight="Light" Tapped="labelAboutApplication_Tapped" />
                 </StackPanel>
-                <StackPanel Margin="0,0,0,20" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Margin="0,0,0,20" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Image Source="Assets/Wide310x150Logo.scale-200.png" Margin="0,0,0,20" Height="120" HorizontalAlignment="Center" Opacity="0.15" />
                 </StackPanel>
             </StackPanel>
